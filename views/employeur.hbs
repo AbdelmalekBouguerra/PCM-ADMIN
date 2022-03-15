@@ -51,46 +51,16 @@
                           </tr>
                         </thead>
                         <tbody>
+                          {{#each table }}
                           <tr>
-                            <td style="width: 10px;">01</td>
-                            <td>iap</td>
-                            <td>QF5C+MCG, Boumerdes</td>
-                            <td>Boumerdes</td>
-                            <td>+213xxxxxxxxx</td>
-                            <td>iapexemplemail@son.com</td>
+                            <td style="width: 10px;" id={{this.ID}}>{{this.ID}}</td>
+                            <td id="LIBELLE,{{this.ID}}">{{this.LIBELLE}}</td>
+                            <td id="ADRESSE,{{this.ID}}">{{this.ADRESSE}}</td>
+                            <td id="REGION,{{this.ID}}">{{this.REGION}}</td>
+                            <td id="TELE,{{this.ID}}">{{this.TELE}}</td>
+                            <td id="MAIL,{{this.ID}}">{{this.MAIL}}</td>
                           </tr>
-                          <tr>
-                            <td style="width: 10px;">01</td>
-                            <td>iap</td>
-                            <td>QF5C+MCG, Boumerdes</td>
-                            <td>Boumerdes</td>
-                            <td>+213xxxxxxxxx</td>
-                            <td>iapexemplemail@son.com</td>
-                          </tr>
-                          <tr>
-                            <td style="width: 10px;">01</td>
-                            <td>iap</td>
-                            <td>QF5C+MCG, Boumerdes</td>
-                            <td>Boumerdes</td>
-                            <td>+213xxxxxxxxx</td>
-                            <td>iapexemplemail@son.com</td>
-                          </tr>
-                          <tr>
-                            <td style="width: 10px;">01</td>
-                            <td>iap</td>
-                            <td>QF5C+MCG, Boumerdes</td>
-                            <td>Boumerdes</td>
-                            <td>+213xxxxxxxxx</td>
-                            <td>iapexemplemail@son.com</td>
-                          </tr>
-                          <tr>
-                            <td style="width: 10px;">01</td>
-                            <td>iap</td>
-                            <td>QF5C+MCG, Boumerdes</td>
-                            <td>Boumerdes</td>
-                            <td>+213xxxxxxxxx</td>
-                            <td>iapexemplemail@son.com</td>
-                          </tr>
+                          {{/each}}
                         </tbody>
                       </table>
                     </div>
