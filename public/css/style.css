@@ -11341,7 +11341,9 @@ textarea.is-invalid.tt-hint {
     .accordion-item:last-of-type .accordion-collapse {
       border-bottom-right-radius: 0.25rem;
       border-bottom-left-radius: 0.25rem; }
-
+.form-control:focus {
+  color: #fff !important;
+}
 .accordion-body {
   padding: 1rem 1.25rem; }
 

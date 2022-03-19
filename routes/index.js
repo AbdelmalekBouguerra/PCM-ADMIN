@@ -17,4 +17,6 @@ router.get("/Acte_medical", (req, res) => {
 router.get("/Structures_conventionnees", (req, res) => {
     res.render('SC');
 });
+
+router.post("/addNewEmp",emp_table.addEmp)
 module.exports = router;

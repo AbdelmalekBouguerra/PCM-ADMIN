@@ -10,15 +10,21 @@ function getEmpTable(callback) {
   });
 }
 
-function setEmpTable(modif,callback) {
+function setEmpTable(modif, callback) {
   for (var i = 0; i < modif.length; i++) {
     var modifItems = modif[i];
-    console.log("🚀 ~ file: emp_table.js ~ line 16 ~ setEmpTable ~ modifItems", modifItems)
+    console.log(
+      "🚀 ~ file: emp_table.js ~ line 16 ~ setEmpTable ~ modifItems",
+      modifItems
+    );
 
-    console.log("🚀 ~ file: emp_table.js ~ line 18 ~ setEmpTable ~ modifItems.col", modifItems.col)
-    console.log(modifItems.col.replace(/['"]+/g, ''));
+    console.log(
+      "🚀 ~ file: emp_table.js ~ line 18 ~ setEmpTable ~ modifItems.col",
+      modifItems.col
+    );
+    console.log(modifItems.col.replace(/['"]+/g, ""));
     db.execute(
-      "UPDATE EMPLOYEUR SET "+modifItems.col+"= ? WHERE ID = ?;",
+      "UPDATE EMPLOYEUR SET " + modifItems.col + "= ? WHERE ID = ?;",
       [
         // modifItems.col,
         modifItems.value,
@@ -36,6 +42,21 @@ function setEmpTable(modif,callback) {
   callback();
 }
 
+function addNewEmp(libEmp, adrEmp, regEmp, telEmp, emailEmp, callback) {
+  db.execute(
+    "INSERT INTO EMPLOYEUR(LIBELLE,ADRESSE,REGION,TELE,MAIL) VALUES(?,?,?,?,?);",
+    [libEmp,adrEmp, regEmp, telEmp, emailEmp],
+    (err, results) => {
+      if (err)
+        console.log(
+          "file : emp_table.js / func : addNewEmp / line : 43 / \n err : ",
+          err
+        );
+      else callback();
+    }
+  );
+}
+
 module.exports = {
   get: (req, res) => {
     getEmpTable((results) => {
@@ -51,7 +72,7 @@ module.exports = {
     var { id_empTable } = req.body;
     id_empTable = JSON.parse(id_empTable);
     console.log("🚀 ~ file: emp_table.js ~ line 34 ~ id_empTable", id_empTable);
-    setEmpTable(id_empTable,()=>{
+    setEmpTable(id_empTable, () => {
       getEmpTable((results) => {
         table = results;
         console.log(
@@ -60,6 +81,12 @@ module.exports = {
         );
         res.render("employeur", { table: table });
       });
+    });
+  },
+  addEmp: (req, res) => {
+    const { libEmp, adrEmp, regEmp, telEmp, emailEmp } = req.body;
+    addNewEmp(libEmp, adrEmp, regEmp, telEmp, emailEmp , () => {
+      res.redirect("../employeur");
     });
   },
 };
