@@ -163,8 +163,6 @@ function pureJson(empTable) {
   return res;
 }
 
-
-
 module.exports = {
   get: (req, res) => {
     getEmpTable((results) => {

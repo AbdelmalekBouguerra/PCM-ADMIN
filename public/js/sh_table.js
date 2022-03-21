@@ -4,8 +4,8 @@ function showBtn() {
   ele.innerHTML =
     '<form method="post" action = "/sh">' +
     '<input type="hidden" name="id_empTable" id="hiddenInput" />' +
-    '<button type="submit" class="btn m-lg-1 btn-primary btn-rounded btn-fw">save</button>' +
-    '<button type="button" onClick="window.location.reload();" class="btn btn-danger btn-rounded btn-fw">cancel</button>' +
+    '<button type="submit" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> '+
+    '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>' +
     "</form>";
   var input = document.getElementById("hiddenInput");
   input.value = JSON.stringify(id_empTable);
@@ -25,6 +25,7 @@ var table = new Tabulator("#example-table", {
   layout: "fitColumns",
   data: data, //assign data to table
   autoColumns: false, //create columns from data field names
+  history:true,
   columns: [
     {formatter:"rowSelection", width: 10, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
       cell.getRow().toggleSelect();
@@ -69,3 +70,44 @@ window.location.reload();
   }
 
 } )
+
+//undo button
+document.getElementById("history-undo").addEventListener("click", function(){
+  table.undo();
+});
+
+
+
+//Define variables for input elements
+var fieldEl = document.getElementById("filter-field");
+var typeEl = "like"
+var valueEl = document.getElementById("filter-value");
+
+//Custom filter example
+function customFilter(data){
+    return data.car && data.rating < 3;
+}
+
+//Trigger setFilter function with correct parameters
+function updateFilter(){
+  var filterVal = fieldEl.options[fieldEl.selectedIndex].value;
+  var typeVal = typeEl.options[typeEl.selectedIndex].value;
+
+  var filter = filterVal == "function" ? customFilter : filterVal;
+
+  if(filterVal == "function" ){
+    typeEl.disabled = true;
+    valueEl.disabled = true;
+  }else{
+    typeEl.disabled = false;
+    valueEl.disabled = false;
+  }
+
+  if(filterVal){
+    table.setFilter(filter,typeVal, valueEl.value);
+  }
+}
+
+//Update filters on value change
+document.getElementById("filter-field").addEventListener("change", updateFilter);
+document.getElementById("filter-value").addEventListener("keyup", updateFilter);
