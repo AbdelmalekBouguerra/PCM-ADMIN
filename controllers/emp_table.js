@@ -1,6 +1,25 @@
+/*
+ * Author : Abdelmalek BOUGUERRA
+ * Author Email : abdelmalekbouguerra2000@gmail.com
+ * Created : Mar 2022
+ * description : All interaction with employeur table getter and setters From database, handling 
+ *               POST and GET methods called by the view "employeur.hbs".
+ *
+ * (c) Copyright by Abdelmalek BOUGUERRA.
+ * 
+ */
+
+// call the db connection object
 const db = require("../env/db");
 
 var table = [];
+
+
+/** getEmpTable
+* fetch the employeur table for MySQL server
+* @param callback sync function insert into it any code that depend on getEmpTable function.
+* @return JSON Object the employeur table.
+*/
 
 function getEmpTable(callback) {
   db.execute("SELECT * FROM EMPLOYEUR", (err, results) => {
@@ -42,10 +61,10 @@ function setEmpTable(modif, callback) {
   callback();
 }
 
-function addNewEmp(libEmp, adrEmp, regEmp, telEmp, emailEmp, callback) {
+function addNewEmp(idEmp,libEmp, adrEmp, regEmp, telEmp, emailEmp, callback) {
   db.execute(
-    "INSERT INTO EMPLOYEUR(LIBELLE,ADRESSE,REGION,TELE,MAIL) VALUES(?,?,?,?,?);",
-    [libEmp,adrEmp, regEmp, telEmp, emailEmp],
+    "INSERT INTO EMPLOYEUR(ID,LIBELLE,ADRESSE,REGION,TELE,MAIL) VALUES(?,?,?,?,?,?);",
+    [idEmp,libEmp,adrEmp, regEmp, telEmp, emailEmp],
     (err, results) => {
       if (err)
         console.log(
@@ -81,12 +100,6 @@ module.exports = {
         );
         res.render("employeur", { table: table });
       });
-    });
-  },
-  addEmp: (req, res) => {
-    const { libEmp, adrEmp, regEmp, telEmp, emailEmp } = req.body;
-    addNewEmp(libEmp, adrEmp, regEmp, telEmp, emailEmp , () => {
-      res.redirect("../employeur");
     });
   },
 };
