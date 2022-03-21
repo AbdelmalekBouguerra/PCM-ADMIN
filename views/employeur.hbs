@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="/css/style.css" />
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/images/favicon.png" />
+
+    <link href="/vendors/tabulator-master/dist/css/tabulator_bulma.min.css" rel="stylesheet">
+
   </head>
   <body>
     <div class="container-scroller">
@@ -38,42 +41,16 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <div class="table-responsive">
-                      <table id="example" class="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>id</th>
-                            <th>libelle</th>
-                            <th>adresse</th>
-                            <th>region</th>
-                            <th>tele</th>
-                            <th>mail</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {{#each table }}
-                          <tr>
-                            <td style="width: 10px" id="{{this.ID}}">
-                              {{this.ID}}
-                            </td>
-                            <td id="LIBELLE,{{this.ID}}">{{this.LIBELLE}}</td>
-                            <td id="ADRESSE,{{this.ID}}">{{this.ADRESSE}}</td>
-                            <td id="REGION,{{this.ID}}">{{this.REGION}}</td>
-                            <td id="TELE,{{this.ID}}">{{this.TELE}}</td>
-                            <td id="MAIL,{{this.ID}}">{{this.MAIL}}</td>
-                          </tr>
-                          {{/each}}
-                        </tbody>
-                      </table>
+                                          <div  id="example-table"></div>
+
                       <button
                         type="button"
                         class="btn btn-inverse-success btn-fw m-2"
-                                                onclick="showModal()"
+                        id = "add-row"
                         value="Open Model"
                       >
                         <i class="mdi mdi-plus">Ajouter</i>
                       </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -88,62 +65,16 @@
           <!-- footer partial -->
           {{> _footer}}
         </div>
-        <div
-          class="modal fade"
-          id="myModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-                              <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Nouvelle employeur</h4>
-                    <p class="card-description">Ajouter un Nouvelle employeur dans la base de donnes</p>
-                    <form class="forms-sample" method="post" action="/addNewEmp">
-                      <div class="form-group">
-                        <label for="exampleInputUsername1">Libelle</label>
-                        <input type="text" name="libEmp" class="form-control" placeholder="Libelle">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Adresse</label>
-                        <input type="text" name="adrEmp" class="form-control" placeholder="Adresse">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Region</label>
-                        <input type="text" name="regEmp" class="form-control" placeholder="Region">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Telephone</label>
-                        <input type="text" name="telEmp" class="form-control" placeholder="Tele">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Email</label>
-                        <input type="email" name="emailEmp" class="form-control" placeholder="Email">
-                      </div>
-
-                      <button type="submit" class="btn btn-primary me-2">Submit</button>
-                      <button class="btn btn-dark">Cancel</button>
-                    </form>
-                  </div>
-                </div>
-            </div>
-          </div>
-        </div>
         <!-- main-panel ends -->
       </div>
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
-
     <!-- plugins:js -->
     <script src="/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
 
     <!-- inject:js -->
-    <script src="/js/editable_table.js"></script>
     <script src="/js/off-canvas.js"></script>
     <script src="/js/hoverable-collapse.js"></script>
     <script src="/js/misc.js"></script>
@@ -151,11 +82,21 @@
     <script src="/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
+
+    <script type="text/javascript" src="/vendors/tabulator-master/dist/js/tabulator.min.js"></script>
+
     <script>
-      function showModal() {
-        $("#myModal").modal("show");
-      }
+      var data = [];
+      var lastID = 0;
+      {{#each table}}
+      data.push({ Id : "{{this.ID}}", Libelle : "{{this.LIBELLE}}", Region : "{{this.REGION}}", Tele :  "{{this.TELE}}" , Email : "{{this.MAIL}}"});
+      lastID = {{this.ID}};
+      console.log("🚀 ~ file: employeur.hbs ~ line 94 ~ lastID", lastID)
+      
+      {{/each}}
     </script>
+        <script src="/js/editable_table.js"></script>
+
     <!-- End custom js for this page -->
   </body>
 </html>
