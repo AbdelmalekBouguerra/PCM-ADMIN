@@ -27,6 +27,17 @@ function getEmpTable(callback) {
   });
 }
 
+function deleteRows(selectedData,callback){
+  selectedData.forEach((ele)=>{
+    db.execute("DELETE FROM SH WHERE ID = ?;",[ele.ID],(err,results)=>{
+      if (err) console.log(err);
+      else console.log(ele.ID,"deleted");
+    })
+  })
+  callback();
+}
+
+
 function setEmpTable(table, callback) {
   // first we organize our object.
   var res = pureJson(table);
@@ -36,13 +47,16 @@ function setEmpTable(table, callback) {
   for (var i = 0; i < res.length; i++) {
     var modifItems = res[i];
     // if id is string it means not a new line
+    console.log("ID :",modifItems.ID);
     if (typeof modifItems.ID == "string") {
-      db.execute(
+      console.log("execute update");
+      console.log("col :",modifItems.col);
+      db.query(
         "UPDATE SH SET " + modifItems.col + "= ? WHERE ID = ?;",
         [
           // modifItems.col,
           modifItems.value,
-          parseInt(modifItems.id),
+          parseInt(modifItems.ID),
         ],
         (err, results) => {
           if (err)
@@ -50,10 +64,12 @@ function setEmpTable(table, callback) {
               "🚀 ~ file: emp_table.js ~ line 8 ~ getEmpTable ~ err",
               err
             );
+            else console.log("update successfully");
         }
       );
       // if id is int it means it s a new line
     } else {
+      console.log("execute insert");
       // check if element of table object is not undefined
       var ID = null,
         CODE = null,
@@ -67,6 +83,7 @@ function setEmpTable(table, callback) {
         [ID, CODE, STR],
         (err, results) => {
           if (err) console.log(err);
+          else console.log("insert successfully");
         }
       );
     }
@@ -128,7 +145,7 @@ function pureJson(empTable) {
         // creat first element and push it to the res = [{id : ele.ID , ele.col = ele.value}]
       } else if (isExisted) {
         res.forEach((ele2) => {
-          if ((ele2.id = ele.ID)) {
+          if ((ele2.ID == ele.ID)) {
             ele2[ele.col] = ele.value;
           }
         });
@@ -139,10 +156,14 @@ function pureJson(empTable) {
         ids.push(ele.ID);
         row = {};
       }
+    } else {
+      res.push(ele);
     }
   });
   return res;
 }
+
+
 
 module.exports = {
   get: (req, res) => {
@@ -166,4 +187,13 @@ module.exports = {
       });
     });
   },
+  delete: (req , res) => {
+    var {value} = req.body;
+    deleteRows(value,()=>{
+      getEmpTable((results) => {
+        table = results;
+        res.render("sh", { table: table });
+      });
+    })
+  }
 };

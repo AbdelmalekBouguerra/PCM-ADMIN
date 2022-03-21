@@ -12,7 +12,11 @@ function showBtn() {
   console.log("json", id_empTable);
   console.log("input : ", input.value);
 }
+function showDeleteBtn() {
+  
+}
 var id_empTable = [];
+var selectedData = [];
 var json_emp = {};
 // FIX : test if is it changed or not to save the new value.
 
@@ -22,6 +26,10 @@ var table = new Tabulator("#example-table", {
   data: data, //assign data to table
   autoColumns: false, //create columns from data field names
   columns: [
+    {formatter:"rowSelection", width: 10, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+      cell.getRow().toggleSelect();
+      
+    }},
     { title: "Id", field: "ID", width:70, sorter:"number"},
     { title: "Code Mnémonique", field: "CODE", editor: "input",sorter:"string" },
     { title: "Structures", field: "STRUCTURE", editor: "input",sorter:"string" },
@@ -46,3 +54,18 @@ document.getElementById("add-row").addEventListener("click", function(){
     table.addRow({ ID : lastID});
     table.redraw();
 });
+
+document.getElementById("del-row").addEventListener("click",function(){
+  selectedData = table.getSelectedData(); //get array of currently selected data.
+  console.log(selectedData);
+  if (confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/deleteSH", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+    value: selectedData
+}));
+window.location.reload();
+  }
+
+} )
