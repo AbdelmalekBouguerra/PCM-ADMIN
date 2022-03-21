@@ -6,7 +6,7 @@ router.get("/", (req, res) => {
     res.render('page');
 });
 
-router.route("/employeur")
+router.route("/sh")
     .get(emp_table.get)
     .post(emp_table.post)
 
@@ -18,5 +18,4 @@ router.get("/Structures_conventionnees", (req, res) => {
     res.render('SC');
 });
 
-router.post("/addNewEmp",emp_table.addEmp)
 module.exports = router;

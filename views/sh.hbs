@@ -34,14 +34,16 @@
           <div class="content-wrapper">
             {{!-- page title --}}
             <div class="page-header">
-              <h3 class="page-title">Table des employeur</h3>
+              <h3 class="page-title">Structures SH</h3>
             </div>
 
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                                          <div  id="example-table"></div>
+                    <p class="card-description">Suivant la décision portant codes des structures SH N° 337 /DG du 07/09/2021 
+                    </p>
+                    <div  id="example-table"></div>
 
                       <button
                         type="button"
@@ -89,10 +91,9 @@
       var data = [];
       var lastID = 0;
       {{#each table}}
-      data.push({ Id : "{{this.ID}}", Libelle : "{{this.LIBELLE}}", Region : "{{this.REGION}}", Tele :  "{{this.TELE}}" , Email : "{{this.MAIL}}"});
+      data.push({ ID : "{{this.ID}}", CODE : "{{this.CODE}}", STRUCTURE : "{{this.STRUCTURE}}"});
       lastID = {{this.ID}};
       console.log("🚀 ~ file: employeur.hbs ~ line 94 ~ lastID", lastID)
-      
       {{/each}}
     </script>
         <script src="/js/editable_table.js"></script>
