@@ -3,6 +3,7 @@ const https = require('https');
 const fs = require('fs');
 const dotenv = require('dotenv');
 const hbs = require('hbs');
+const session = require('cookie-session');
 const path = require('path');
 // env config
 dotenv.config();

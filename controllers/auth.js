@@ -43,17 +43,19 @@ exports.login = (req, res) => {
     } = req.body;
 
     if (password !== '0000') {
-        res.render('index', {
+        res.render('login', {
             invalid: 'password is incorrect',
             password: password,
             username: username,
         })
     } else {
+        // ! isAuth is not used in the app 
+        // todo : add it to index.js route to verify if he logged in 
         req.session.isAuth = true; // bool value to check if user logged in
         getUser(username,(user)=>{
             req.session.user = user; // save user information in session value
             req.session.username = username;
-            res.render('accueil')
+            res.render('page')
         })
 
     }
