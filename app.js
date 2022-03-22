@@ -25,6 +25,15 @@ app.use(express.urlencoded({ extended:false}))
 // Parse JSON bodies as sent by API clients
 app.use(express.json())
 
+// Session config
+app.use(session({
+    name:'session',
+    secret:'key1',
+    key: ['key1','key2'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+
+}))
+
 // define public directory
 const publicDirectory = path.join(__dirname,'./public')
 app.use(express.static(publicDirectory))
