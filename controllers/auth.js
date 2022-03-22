@@ -8,7 +8,7 @@ function  getUser(username,callback) {
         [username],
          (err, results) => {
             if (err) {
-                console.log(style.error('MySQL in getUser :'+err));
+                console.error(err);
                 return;
             }
             callback(results);
@@ -53,9 +53,10 @@ exports.login = (req, res) => {
         // todo : add it to index.js route to verify if he logged in 
         req.session.isAuth = true; // bool value to check if user logged in
         getUser(username,(user)=>{
-            req.session.user = user; // save user information in session value
+            req.session.user = user[0]; // save user information in session value
+            console.log("🚀 ~ file: auth.js ~ line 57 ~ getUser ~ req.session.user", req.session.user)
             req.session.username = username;
-            res.render('page')
+            res.render('page', { user:user[0] });
         })
 
     }
