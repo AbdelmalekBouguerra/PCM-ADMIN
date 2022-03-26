@@ -56,7 +56,10 @@ exports.login = (req, res) => {
             req.session.user = user[0]; // save user information in session value
             console.log("🚀 ~ file: auth.js ~ line 57 ~ getUser ~ req.session.user", req.session.user)
             req.session.username = username;
-            res.render('page', { user:user[0] });
+            var Fl = user[0].PRENOM.charAt(0).toUpperCase();
+            var Ln = user[0].NOM.charAt(0).toUpperCase() + user[0].NOM.slice(1);
+            console.log(Ln);
+            res.render('page', { user:user[0],FirstLetter : Fl, LastName : Ln });
         })
 
     }

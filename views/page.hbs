@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Corona Admin</title>
+    <title>PCM - Accueil</title>
     <!-- plugins:css -->
     <link
       rel="stylesheet"
@@ -29,7 +29,110 @@
         {{> _navbar}}
         <div class="main-panel">
           <div class="content-wrapper">
-            <h1>hello {{user.PRENOM}}</h1>
+            <!-- Stats cards -->
+            <div class="row"> 
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">300</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Visiteurs par jour</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">15</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+11%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">PCM établit par jour</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">$12.34</h3>
+                          <p class="text-danger ms-2 mb-0 font-weight-medium">-2.4%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-danger">
+                          <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Daily Income</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">$31.53</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Expense current</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- charts -->
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                    <h4 class="card-title">Visiteurs par jour</h4>
+                    <canvas id="lineChart" style="height: 351px; display: block; width: 703px;" width="703" height="351" class="chartjs-render-monitor"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                    <h4 class="card-title">Visiteurs par mois</h4>
+                    <canvas id="barChart" style="height: 351px; display: block; width: 703px;" width="703" height="351" class="chartjs-render-monitor"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           <!-- content-wrapper ends -->
 
@@ -46,6 +149,9 @@
     <!-- plugins:js -->
     <script src="/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
+        <!-- Plugin js for this page -->
+    <script src="/vendors/chart.js/Chart.min.js"></script>
+    <!-- End plugin js for this page -->
 
     <!-- inject:js -->
     <script src="/js/off-canvas.js"></script>
@@ -55,7 +161,11 @@
     <script src="/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-
+    <script>
+      var lineChartData = [20,41,25,62,55,32,80]
+      var barChartDatat = [100,255,214,275,455,540,147,447,600,785,142,125]
+    </script>
+    <script src="/js/chart.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

@@ -7,6 +7,8 @@
       <span class="mdi mdi-menu"></span>
     </button>
     <ul class="navbar-nav navbar-nav-right">
+          <h3 class="p-4 m-2" id="time"></h3>
+
       <li class="nav-item dropdown d-none d-lg-block">
       </li>
       <li class="nav-item nav-settings d-none d-lg-block">
@@ -108,3 +110,20 @@
     </button>
   </div>
 </nav>
+
+<script>
+  function display_ct5() {
+var x = new Date()
+
+var x1=x.getMonth() + 1+ "/" + x.getDate() + "/" + x.getFullYear(); 
+x1 = x1 + " - " +  x.getHours( )+ ":" +  x.getMinutes() + ":" +  x.getSeconds();
+document.getElementById('time').innerHTML = x1;
+display_c5();
+ }
+ function display_c5(){
+var refresh=1000; // Refresh rate in milli seconds
+mytime=setTimeout('display_ct5()',refresh)
+}
+display_c5()
+
+</script>
