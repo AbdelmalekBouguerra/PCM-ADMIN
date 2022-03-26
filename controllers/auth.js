@@ -59,7 +59,7 @@ exports.login = (req, res) => {
             var Fl = user[0].PRENOM.charAt(0).toUpperCase();
             var Ln = user[0].NOM.charAt(0).toUpperCase() + user[0].NOM.slice(1);
             console.log(Ln);
-            res.render('page', { user:user[0],FirstLetter : Fl, LastName : Ln });
+            res.render('dashboard', { user:user[0],FirstLetter : Fl, LastName : Ln });
         })
 
     }

@@ -32,7 +32,7 @@ var table = new Tabulator("#example-table", {
       
     }},
     { title: "Id", field: "ID", width:70, sorter:"number"},
-    { title: "Code Mnémonique", field: "CODE", editor: "input",sorter:"string" },
+    { title: "Code Mnémonique", field: "CODE",width:197, editor: "input",sorter:"string" },
     { title: "Structures", field: "STRUCTURE", editor: "input",sorter:"string" },
   ],
 });
