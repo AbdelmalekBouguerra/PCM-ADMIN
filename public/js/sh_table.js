@@ -42,7 +42,6 @@ table.on("cellEdited", function (cell) {
   json_emp["value"] = cell.getValue()
 
   id_empTable.push(json_emp);
-  console.log("🚀 ~ file: editable_table.js ~ line 47 ~ id_empTable", id_empTable)
   json_emp = {};
 
   showBtn();
@@ -71,28 +70,16 @@ window.location.reload();
 
 } )
 
-//undo button
-document.getElementById("history-undo").addEventListener("click", function(){
-  table.undo();
-});
-
-
-
 //Define variables for input elements
 var fieldEl = document.getElementById("filter-field");
 var typeEl = "like"
 var valueEl = document.getElementById("filter-value");
-
-//Custom filter example
-function customFilter(data){
-    return data.car && data.rating < 3;
-}
-
+ 
 //Trigger setFilter function with correct parameters
 function updateFilter(){
   var filterVal = fieldEl.options[fieldEl.selectedIndex].value;
-  var typeVal = typeEl.options[typeEl.selectedIndex].value;
-
+  console.log("🚀 ~ file: sh_table.js ~ line 90 ~ updateFilter ~ filterVal", filterVal)
+  typeVal = "like";
   var filter = filterVal == "function" ? customFilter : filterVal;
 
   if(filterVal == "function" ){

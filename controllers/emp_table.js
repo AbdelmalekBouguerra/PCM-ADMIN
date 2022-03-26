@@ -41,16 +41,11 @@ function deleteRows(selectedData,callback){
 function setEmpTable(table, callback) {
   // first we organize our object.
   var res = pureJson(table);
-  console.log("🚀 ~ file: emp_table.js ~ line 33 ~ setEmpTable ~ table", table)
-  console.log("🚀 ~ file: emp_table.js ~ line 33 ~ setEmpTable ~ res", res)
   // then we loop in each element
   for (var i = 0; i < res.length; i++) {
     var modifItems = res[i];
     // if id is string it means not a new line
-    console.log("ID :",modifItems.ID);
     if (typeof modifItems.ID == "string") {
-      console.log("execute update");
-      console.log("col :",modifItems.col);
       db.query(
         "UPDATE SH SET " + modifItems.col + "= ? WHERE ID = ?;",
         [
@@ -59,11 +54,7 @@ function setEmpTable(table, callback) {
           parseInt(modifItems.ID),
         ],
         (err, results) => {
-          if (err)
-            console.log(
-              "🚀 ~ file: emp_table.js ~ line 8 ~ getEmpTable ~ err",
-              err
-            );
+          if (err) console.error(err)
             else console.log("update successfully");
         }
       );
@@ -77,7 +68,6 @@ function setEmpTable(table, callback) {
       if (typeof modifItems.ID !== "undefined") ID = modifItems.ID;
       if (typeof modifItems.CODE !== "undefined") CODE = modifItems.CODE;
       if (typeof modifItems.STRUCTURE !== "undefined") STR = modifItems.STRUCTURE;
-      console.log("id,code,str",ID,CODE,STR);
       db.execute(
         "INSERT INTO SH(ID,CODE,STRUCTURE) VALUES(?,?,?);",
         [ID, CODE, STR],
@@ -167,10 +157,6 @@ module.exports = {
   get: (req, res) => {
     getEmpTable((results) => {
       table = results;
-      console.log(
-        "🚀 ~ file: emp_table.js ~ line 16 ~ getEmpTable ~ table",
-        table
-      );
       res.render("sh", { table: table });
     });
   },
