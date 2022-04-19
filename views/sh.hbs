@@ -52,7 +52,14 @@
                   <button type="button" class="btn btn-inverse-success btn-fw m-2" id="add-row">
                     <i class="mdi mdi-plus">Ajouter</i>
                   </button>
-                  <button id="del-row" type="button" class="btn btn-inverse-danger btn-fw">Supprimer</button>
+                  <form method="post" action="/deleteSH" 
+                  onsubmit='if (!confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
+                    return false;
+                    }'
+                  >
+                    <input type="hidden" name="selectedRowsForDel" id="selectedRowsForDel" />
+                    <button id="del-row" type="submit" class="btn btn-inverse-danger btn-fw">Supprimer</button>
+                  </form>
                   <br>
                   <div id="btn"></div>
                 </div>

@@ -2,7 +2,9 @@ function showBtn() {
   var ele = document.getElementById("btn");
 
   ele.innerHTML =
-    '<form method="post" action = "/sh">' +
+    '<form method="post" action = "/sh" onsubmit="if(!confirm(\'êtes-vous sûr de vouloir ajouter ces lignes!\')) { '+
+     'return false;'+
+      '}"> '+
     '<input type="hidden" name="id_empTable" id="hiddenInput" />' +
     '<button type="submit" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> '+
     '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>' +
@@ -45,9 +47,17 @@ table.on("cellEdited", function (cell) {
   json_emp = {};
 
   showBtn();
-
+});
+table.on("rowSelected", function(row){
+  //row - row component for the selected row
+  selectedData = table.getSelectedData();
+  var selectedRowsForDel = document.getElementById("selectedRowsForDel");
+  selectedRowsForDel.value = JSON.stringify(selectedData);
+   //get array of currently selected data.
+  console.log(selectedData);
 
 });
+
 
 document.getElementById("add-row").addEventListener("click", function(){
     lastID = lastID + 1 ;
@@ -56,18 +66,19 @@ document.getElementById("add-row").addEventListener("click", function(){
 });
 
 document.getElementById("del-row").addEventListener("click",function(){
-  selectedData = table.getSelectedData(); //get array of currently selected data.
-  console.log(selectedData);
-  if (confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/deleteSH", true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({
-    value: selectedData
-}));
-window.location.reload();
-  }
+//   if (confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
 
+//     //! FIX : here it first execute the POST method from /sh link (Add rows)
+//     //! then it go for the deleting the rows
+
+//     var xhr = new XMLHttpRequest();
+//     xhr.open("POST", "/deleteSH", true);
+//     xhr.setRequestHeader('Content-Type', 'application/json');
+//     xhr.send(JSON.stringify({
+//     value: selectedData
+// }));
+// window.location.reload();
+//   }
 } )
 
 //Define variables for input elements

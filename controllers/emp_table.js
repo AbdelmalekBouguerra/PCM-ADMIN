@@ -28,6 +28,8 @@ function getEmpTable(callback) {
 }
 
 function deleteRows(selectedData,callback){
+console.log("🚀 ~ file: emp_table.js ~ line 31 ~ deleteRows ~ selectedData", selectedData)
+  selectedData = JSON.parse(selectedData);
   selectedData.forEach((ele)=>{
     db.execute("DELETE FROM SH WHERE ID = ?;",[ele.ID],(err,results)=>{
       if (err) console.log(err);
@@ -39,6 +41,7 @@ function deleteRows(selectedData,callback){
 
 
 function setEmpTable(table, callback) {
+  if (table !== null) {
   // first we organize our object.
   var res = pureJson(table);
   // then we loop in each element
@@ -68,7 +71,7 @@ function setEmpTable(table, callback) {
       if (typeof modifItems.ID !== "undefined") ID = modifItems.ID;
       if (typeof modifItems.CODE !== "undefined") CODE = modifItems.CODE;
       if (typeof modifItems.STRUCTURE !== "undefined") STR = modifItems.STRUCTURE;
-      db.execute(
+      db.query(
         "INSERT INTO SH(ID,CODE,STRUCTURE) VALUES(?,?,?);",
         [ID, CODE, STR],
         (err, results) => {
@@ -79,6 +82,11 @@ function setEmpTable(table, callback) {
     }
   }
   callback();
+}
+else{
+  console.log("we fix it");
+  return 0;
+}
 }
 
 /** pureJson
@@ -161,7 +169,9 @@ module.exports = {
     });
   },
   post: (req, res) => {
+    //! FIX : this methods is executing in delete function 
     var { id_empTable } = req.body;
+    console.log(id_empTable);
     id_empTable = JSON.parse(id_empTable);
 
     setEmpTable(id_empTable, () => {
@@ -172,12 +182,12 @@ module.exports = {
     });
   },
   delete: (req , res) => {
-    var {value} = req.body;
-    deleteRows(value,()=>{
-      getEmpTable((results) => {
-        table = results;
-        res.render("sh", { table: table });
-      });
+    var {selectedRowsForDel} = req.body;
+    
+    console.log("🚀 ~ file: emp_table.js ~ line 181 ~ value", selectedRowsForDel)
+    
+    deleteRows(selectedRowsForDel,()=>{
+      res.redirect("/sh")
     })
   }
 };

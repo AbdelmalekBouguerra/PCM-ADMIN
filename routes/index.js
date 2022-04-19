@@ -36,6 +36,6 @@ router.get("/Acte_medical", (req, res) => {
 router.get("/Structures_conventionnees", (req, res) => {
     res.render('SC');
 });
-
 router.post("/deleteSH",emp_table.delete)
+
 module.exports = router;
