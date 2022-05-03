@@ -165,7 +165,8 @@ module.exports = {
   get: (req, res) => {
     getEmpTable((results) => {
       table = results;
-      res.render("sh", { table: table });
+      // res.render("sh", { table: table });
+      res.json({last_page:1, data : table});
     });
   },
   post: (req, res) => {
