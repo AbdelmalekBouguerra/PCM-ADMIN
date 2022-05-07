@@ -6,5 +6,6 @@
         "Enregistrer",
         "modif",
         "PRENOM"
-    ]
+    ],
+    "docwriter.style": "Google"
 }
