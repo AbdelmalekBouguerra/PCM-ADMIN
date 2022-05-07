@@ -26,7 +26,7 @@ router.route('/dashboard')
 
     })
 
-    router.get("/shtabel", (req, res) => {
+    router.get("/shtab", (req, res) => {
         res.render('sh');
     });
 

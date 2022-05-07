@@ -1,18 +1,36 @@
+//! bug when updating existing row
+function deletRow() {
+  // var input = document.getElementById("hiddenInput");
+  // input.value = JSON.stringify(id_empTable);
+  console.log("json", id_empTable);
+  // console.log("input : ", input.value);
+  if(confirm('êtes-vous sûr de vouloir ajouter ces lignes!')){
+    $.ajax({
+      url : "/sh", // Url of backend (can be python, php, etc..)
+      type: "POST", // data type (can be get, post, put, delete)
+      data: JSON.stringify(id_empTable),
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      async : false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+      success: function(response, textStatus, jqXHR) {
+        console.log(response);
+        table.setData();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+      }
+  });
+  } else return false;
+    
+}
 function showBtn() {
   var ele = document.getElementById("btn");
 
   ele.innerHTML =
-    '<form method="post" action = "/sh" onsubmit="if(!confirm(\'êtes-vous sûr de vouloir ajouter ces lignes!\')) { ' +
-    "return false;" +
-    '}"> ' +
-    '<input type="hidden" name="id_empTable" id="hiddenInput" />' +
-    '<button type="submit" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
-    '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>' +
-    "</form>";
-  var input = document.getElementById("hiddenInput");
-  input.value = JSON.stringify(id_empTable);
-  console.log("json", id_empTable);
-  console.log("input : ", input.value);
+    '<button type="button" onClick="deletRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
+    '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>' ;
 }
 function showDeleteBtn() {}
 var id_empTable = [];
@@ -22,6 +40,7 @@ var json_emp = {};
 
 //initialize table
 var table = new Tabulator("#example-table", {
+  scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
   height:"500px",
   ajaxURL: "https://localhost:3030/sh", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
@@ -34,6 +53,7 @@ var table = new Tabulator("#example-table", {
   autoColumns: false, //create columns from data field names
   history: true,
   placeholder: "No Data Set",
+  index:"ID",
   columns: [
     {
       formatter: "rowSelection",
@@ -68,7 +88,7 @@ table.on("cellEdited", function (cell) {
 
   id_empTable.push(json_emp);
   json_emp = {};
-
+  console.log(id_empTable)
   showBtn();
 });
 table.on("rowSelected", function (row) {
@@ -81,8 +101,10 @@ table.on("rowSelected", function (row) {
 });
 
 document.getElementById("add-row").addEventListener("click", function () {
-  lastID = lastID + 1;
-  table.addRow({ ID: lastID });
+  var rowCount = table.getDataCount();
+  // we add +'' to make the ID a string cuz our controller test if string it update else insert
+  table.addRow({ID : rowCount+1+''});
+  table.scrollToRow(rowCount+1, "middle",true);
   table.redraw();
 });
 
@@ -133,3 +155,4 @@ document
   .getElementById("filter-field")
   .addEventListener("change", updateFilter);
 document.getElementById("filter-value").addEventListener("keyup", updateFilter);
+
