@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const hbs = require('hbs');
 const session = require('cookie-session');
 const path = require('path');
+
 // env config
 dotenv.config();
 
@@ -34,10 +35,17 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
 
 }))
+var auth = false;
 
+auth = require('./routes/index');
 // define public directory
 const publicDirectory = path.join(__dirname,'./public')
 app.use(express.static(publicDirectory))
+var serveIndex = require('serve-index');
+
+if (auth) {
+    app.use('/dpcFiles', serveIndex(path.join(__dirname,'./res/DpcDocs'),{'icons': true}));
+}
 
 // Define view engine
 app.set('view engine', 'hbs');

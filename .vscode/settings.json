@@ -2,10 +2,17 @@
     "liveServer.settings.port": 5501,
     "cSpell.words": [
         "accueil",
+        "BENEFICIAIRE",
+        "BÉNÉFICIAIRE",
+        "DEMANDEUR",
         "EMPLOYEUR",
         "Enregistrer",
+        "MATRICULE",
+        "même",
         "modif",
-        "PRENOM"
+        "PARENTE",
+        "PRENOM",
+        "STATU"
     ],
     "docwriter.style": "Google"
 }

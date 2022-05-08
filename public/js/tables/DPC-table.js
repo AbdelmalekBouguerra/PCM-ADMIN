@@ -26,7 +26,6 @@ var table = new Tabulator("#DPC-table", {
       field: "MATRICULE_DEM",
       width: 116,
       sorter: "string",
-      cellPopup:"Hey, Im a Popup!"
     },
     {
       title: "Lien de parente du Ben",

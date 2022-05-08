@@ -49,7 +49,6 @@ var table = new Tabulator("#example-table", {
   },
   layout: "fitColumns",
   progressiveLoad:"scroll",
-  // data: data, //assign data to table
   autoColumns: false, //create columns from data field names
   history: true,
   placeholder: "No Data Set",

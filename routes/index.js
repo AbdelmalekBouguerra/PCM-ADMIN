@@ -1,12 +1,22 @@
 const emp_table = require("../controllers/emp_table");
 const auth = require("../controllers/auth");
+const dpc = require("../controllers/dpc_table");
 const express = require("express");
 const res = require("express/lib/response");
 const router = express.Router();
 
+const openExplorer = require('open-file-explorer');
+
+
 router.get("/", (req, res) => {
   res.render("login");
 });
+
+router.get("/dpc1",(req,res) => {
+  console.log("hiii :=) hiiii");
+  var auth = true
+  module.exports = auth;
+})
 
 router
   .route("/dashboard")
@@ -47,4 +57,17 @@ router.get("/DPC", (req, res) => {
 
 router.post("/deleteSH", emp_table.delete);
 
+router.route("/DPCtable").get(dpc.get);
+
+router.get('/openFolder',(req,res) => {
+  const path = '/home/abdelmalek/projects';
+openExplorer(path, err => {
+    if(err) {
+        console.log(err);
+    }
+    else {
+        console.log("successful");
+    }
+});
+})
 module.exports = router;
