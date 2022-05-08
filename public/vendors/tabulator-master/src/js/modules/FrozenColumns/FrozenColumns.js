@@ -12,7 +12,6 @@ class FrozenColumns extends Module{
 		this.rightPadding = 0;
 		this.initializationMode = "left";
 		this.active = false;
-		this.scrollEndTimer = false;
 		this.blocked = true;
 		
 		this.registerColumnOption("frozen");
@@ -39,7 +38,12 @@ class FrozenColumns extends Module{
 		this.subscribe("row-layout-after", this.layoutRow.bind(this));
 		this.subscribe("table-layout", this.layout.bind(this));
 		this.subscribe("scroll-horizontal", this.scrollHorizontal.bind(this));
+		this.subscribe("scroll-horizontal", this.scrollHorizontal.bind(this));
 		this.subscribe("columns-loading", this.reset.bind(this));
+		
+		this.subscribe("column-add", this.reinitializeColumns.bind(this));
+		this.subscribe("column-delete", this.reinitializeColumns.bind(this));
+		
 		this.subscribe("table-redraw", this.layout.bind(this));
 		this.subscribe("layout-refreshing", this.blockLayout.bind(this));
 		this.subscribe("layout-refreshed", this.unblockLayout.bind(this));
@@ -55,6 +59,14 @@ class FrozenColumns extends Module{
 	
 	layoutCell(cell){
 		this.layoutElement(cell.element, cell.column)
+	}
+	
+	reinitializeColumns(){
+		this.reset();
+		
+		this.table.columnManager.columnsByIndex.forEach((column) => {
+			this.initializeColumn(column);
+		});
 	}
 	
 	//initialize specific column
@@ -83,8 +95,6 @@ class FrozenColumns extends Module{
 	}
 	
 	frozenCheck(column){
-		var frozen = false;
-		
 		if(column.parent.isGroup && column.definition.frozen){
 			console.warn("Frozen Column Error - Parent column group must be frozen, not individual columns or sub column groups");
 		}
@@ -94,30 +104,20 @@ class FrozenColumns extends Module{
 		}else{
 			return column.definition.frozen;
 		}
-		
-		return frozen;
 	}
 	
 	//quick layout to smooth horizontal scrolling
 	scrollHorizontal(){
 		var rows;
 		
-		if(this.active){
-			clearTimeout(this.scrollEndTimer);
-
-			rows = this.table.rowManager.getVisibleRows();
-			
+		if(this.active){		
 			this.calcMargins(true);
 			
 			this.layoutColumnPosition();
 			
 			this.layoutCalcRows();
 			
-			rows.forEach((row) => {
-				if(row.type === "row"){
-					this.layoutRow(row);
-				}
-			});
+			this.reinitializeRows();
 		}
 	}
 	
@@ -129,7 +129,7 @@ class FrozenColumns extends Module{
 			this.rightMargin = this._calcSpace(this.rightColumns, this.rightColumns.length) + "px";	
 			this.table.rowManager.tableElement.style.marginRight = this.rightMargin;
 		}
-	
+		
 		//calculate right frozen columns
 		this.rightPadding = this.table.rowManager.element.clientWidth + this.table.columnManager.scrollLeft;
 	}
@@ -176,10 +176,11 @@ class FrozenColumns extends Module{
 		
 		this.table.columnManager.headersElement.style.marginLeft = this.leftMargin;
 		this.table.columnManager.element.style.paddingRight = this.rightMargin;
-
+		
 		this.leftColumns.forEach((column, i) => {	
-			column.modules.frozen.margin = (leftMargin + this.table.columnManager.scrollLeft) + "px";
-
+			column.modules.frozen.marginValue = leftMargin + this.table.columnManager.scrollLeft;
+			column.modules.frozen.margin = column.modules.frozen.marginValue + "px";
+			
 			if(column.visible){
 				leftMargin += column.getWidth();
 			}
@@ -212,12 +213,13 @@ class FrozenColumns extends Module{
 		});
 		
 		this.rightColumns.forEach((column, i) => {
-
+			
 			if(column.visible){
 				rightMargin += column.getWidth();
 			}
-
-			column.modules.frozen.margin = (this.rightPadding - rightMargin) + "px";
+			
+			column.modules.frozen.marginValue = this.rightPadding - rightMargin;
+			column.modules.frozen.margin = column.modules.frozen.marginValue + "px";
 			
 			if(i == this.rightColumns.length - 1){
 				column.modules.frozen.edge = true;
@@ -245,25 +247,37 @@ class FrozenColumns extends Module{
 	}
 	
 	//layout columns appropriately
-	layout(){
+	layout(){	
 		if(this.active && !this.blocked){
 			//calculate row padding
 			this.calcMargins();
 			
-			this.table.rowManager.getDisplayRows().forEach((row) =>{
-				if(row.type === "row"){
-					this.layoutRow(row);
-				}
-			});
+			//calculate left columns
+			this.layoutColumnPosition();
+
+			this.reinitializeRows();
 			
 			this.layoutCalcRows();
-			
-			//calculate left columns
-			this.layoutColumnPosition(true);
 		}
 	}
 	
+	reinitializeRows(){
+		var visibleRows = this.table.rowManager.getVisibleRows();
+		var otherRows = this.table.rowManager.getRows().filter(row => !visibleRows.includes(row));
+
+		otherRows.forEach((row) =>{
+			row.deinitialize();
+		});
+		
+		visibleRows.forEach((row) =>{
+			if(row.type === "row"){
+				this.layoutRow(row);
+			}
+		});
+	}
+	
 	layoutRow(row){
+		// console.trace("row")
 		var rowEl = row.getElement();
 		
 		rowEl.style.paddingLeft = this.leftMargin;
