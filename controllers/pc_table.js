@@ -73,14 +73,21 @@ function setPCTable(table, callback) {
         // check if element of table object is not undefined
         var ID = null,
           SPECIALITE = null,
-          CMS_BOUMERDES = null,
-          CMS_TIZI_OUZOU = null;
+          CMS_BOUMERDES = 0,
+          CMS_TIZI_OUZOU = 0;
         if (typeof modifItems.ID !== "undefined") ID = modifItems.ID;
-        if (typeof modifItems.SPECIALITE !== "undefined")
+        if (typeof modifItems.SPECIALITE !== "undefined" &&
+        modifItems.SPECIALITE !== "")
           SPECIALITE = modifItems.SPECIALITE;
-        if (typeof modifItems.CMS_BOUMERDES !== "undefined")
+        if (
+          typeof modifItems.CMS_BOUMERDES !== "undefined" &&
+          modifItems.CMS_BOUMERDES !== ""
+        )
           CMS_BOUMERDES = modifItems.CMS_BOUMERDES;
-        if (typeof modifItems.CMS_TIZI_OUZOU !== "undefined")
+        if (
+          typeof modifItems.CMS_TIZI_OUZOU !== "undefined" &&
+          modifItems.CMS_TIZI_OUZOU !== ""
+        )
           CMS_TIZI_OUZOU = modifItems.CMS_TIZI_OUZOU;
         db.query(
           "INSERT INTO PRESTATIONS_CMS(ID,SPECIALITE,CMS_BOUMERDES,CMS_TIZI_OUZOU) VALUES(?,?,?,?);",
@@ -200,11 +207,11 @@ module.exports = {
     );
 
     deleteRows(selectedRowsForDel, () => {
-      res.redirect("/Medecins_conventionnes");
+      res.redirect("/Prestations_cms");
     });
   },
 };
 
-function low(st){
+function low(st) {
   return st.toLowerCase();
 }
