@@ -4,6 +4,7 @@
         "accueil",
         "BENEFICIAIRE",
         "BÉNÉFICIAIRE",
+        "BOUMERDES",
         "CONVENTIONNES",
         "DEMANDEUR",
         "EMPLOYEUR",
@@ -15,10 +16,14 @@
         "MEDECINS",
         "même",
         "modif",
+        "OUZOU",
         "PARENTE",
         "PRENOM",
+        "Prestations",
         "scroller",
-        "STATU"
+        "SPECIALITE",
+        "STATU",
+        "TIZI"
     ],
     "docwriter.style": "Google"
 }
