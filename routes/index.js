@@ -6,6 +6,7 @@ const res = require("express/lib/response");
 const mc_table = require("../controllers/mc_table");
 const pc_table = require("../controllers/pc_table");
 const smt_table = require("../controllers/smt_table");
+const stp_table = require("../controllers/stp_table");
 const router = express.Router();
 
 var user;
@@ -75,7 +76,7 @@ router.route("/PC").get(pc_table.get).post(pc_table.post);
 router.post("/deletePC", pc_table.delete);
 // -------------------------------------------------------
 
-// Liste des structures Médecine du travail ==============
+// Liste des structures Médecine du travail =================
 router.get("/Structures_Medecine_du_travail", (req, res) => {
   user = req.session.user;
   Fl = user.PRENOM.charAt(0).toUpperCase();
@@ -88,6 +89,21 @@ router.get("/Structures_Medecine_du_travail", (req, res) => {
 router.route("/SMT").get(smt_table.get).post(smt_table.post);
 router.post("/deleteSMT", smt_table.delete);
 // -------------------------------------------------------
+
+// Liste des structures Tiers payant ========================
+router.get("/Structures_Tiers_payant", (req, res) => {
+  user = req.session.user;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("stp", {
+    FirstName: Fl,
+    LastName: Ln,
+  });
+});
+router.route("/STP").get(stp_table.get).post(stp_table.post);
+router.post("/deleteSTP", stp_table.delete);
+// ----------------------------------------------------------
+
 
 
 router.get("/DPC", (req, res) => {
