@@ -3,32 +3,26 @@ const auth = require("../controllers/auth");
 const dpc = require("../controllers/dpc_table");
 const express = require("express");
 const res = require("express/lib/response");
+const mc_table = require("../controllers/mc_table");
 const router = express.Router();
 
-const openExplorer = require('open-file-explorer');
-
+var user;
+var Fl;
+var Ln;
 
 router.get("/", (req, res) => {
   res.render("login");
 });
-
-router.get("/dpc1",(req,res) => {
-  console.log("hiii :=) hiiii");
-  var auth = true
-  module.exports = auth;
-})
 
 router
   .route("/dashboard")
   .post(auth.login)
   .get((req, res) => {
     if (req.session.isAuth) {
-      var user = req.session.user;
-      console.log("🚀 ~ file: index.js ~ line 15 ~ .get ~ user", user);
-      var Fl = user.PRENOM.charAt(0).toUpperCase();
-      var Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-      console.log(Ln);
-      res.render("dashboard", { user: user, FirstLetter: Fl, LastName: Ln });
+      user = req.session.user;
+      Fl = user.PRENOM.charAt(0).toUpperCase();
+      Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+      res.render("dashboard", { user: user, FirstName: Fl, LastName: Ln });
     } else {
       res.render("login", {
         invalid: "You need to be authenticated to access this page",
@@ -37,19 +31,32 @@ router
   });
 
 router.get("/shtab", (req, res) => {
-  res.render("sh");
+  // todo change the mothed how you are passing user data
+  // todo add a auth test
+  user = req.session.user;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("sh", {
+    FirstName: Fl,
+    LastName: Ln,
+  });
 });
-
+// to get sh table
 router.route("/sh").get(emp_table.get).post(emp_table.post);
 
-router.get("/Acte_medical", (req, res) => {
-  res.render("Acte_medical");
+router.get("/Medecins_conventionnes", (req, res) => {
+  user = req.session.user;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("MC", {
+    FirstName: Fl,
+    LastName: Ln,
+  });
 });
 
-/* Rendering the SC.hbs file. */
-router.get("/Structures_conventionnees", (req, res) => {
-  res.render("SC");
-});
+router.route("/MC").get(mc_table.get).post(mc_table.post);
+router.post("/deleteMC", mc_table.delete);
+
 
 router.get("/DPC", (req, res) => {
   res.render("DPC");
@@ -59,15 +66,4 @@ router.post("/deleteSH", emp_table.delete);
 
 router.route("/DPCtable").get(dpc.get);
 
-router.get('/openFolder',(req,res) => {
-  const path = '/home/abdelmalek/projects';
-openExplorer(path, err => {
-    if(err) {
-        console.log(err);
-    }
-    else {
-        console.log("successful");
-    }
-});
-})
 module.exports = router;

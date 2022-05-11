@@ -48,9 +48,7 @@ exports.login = (req, res) => {
             password: password,
             username: username,
         })
-    } else {
-        // ! isAuth is not used in the app 
-        // todo : add it to index.js route to verify if he logged in 
+    } else { 
         req.session.isAuth = true; // bool value to check if user logged in
         getUser(username,(user)=>{
             req.session.user = user[0]; // save user information in session value
