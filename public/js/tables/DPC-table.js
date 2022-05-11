@@ -1,7 +1,21 @@
 //Generate doc icon
 var docIcon = function (cell, formatterParams) {
+  //plain text value'
+  return (
+    '<button type="button" class="btn btn-inverse-primary btn-icon">' +
+    '<i class="mdi mdi mdi-file" style="margin-right: 0px;"></i>' +
+    "</button>"
+  );
+};
+
+var success = function (cell, formatterParams) {
   //plain text value
-  return "<i class='mdi mdi-file-multiple'></i>";
+  return (
+    '<button type="button" class="btn btn-inverse-success btn-icon">' +
+    '<i class="mdi mdi mdi-check" style="margin-right: 0px;"></i></button>' +
+    '<button type="button" class="btn btn-inverse-danger btn-icon" style="margin-left: 10px;">' +
+    '<i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>'
+  );
 };
 
 // initialize table
@@ -46,22 +60,40 @@ var table = new Tabulator("#DPC-table", {
       sorter: "string",
     },
     {
-      title: "VALIDATION",
+      title: "Agent",
       field: "VALIDATION",
       hozAlign: "center",
-      width: 120,
-      editor: true,
+      width: 77,
       formatter: "tickCross",
     },
     {
+      title: "Chef Region",
+      field: "VALIDATION",
+      hozAlign: "center",
+      width: 77,
+      formatter: "tickCross",
+    },
+    {
+      title: "Directeur",
+      field: "VALIDATION",
+      hozAlign: "center",
+      width: 77,
+      formatter: "tickCross",
+    },
+    {
+      title: "pièce jointe",
       formatter: docIcon,
-      field: "document",
-
-      width: 40,
+      width: 118 ,
       hozAlign: "center",
       cellClick: function (e, cell) {
-        alert("Printing row data for: " + cell.getRow().getData().ID);
+        window.open("https://localhost:3030/dpcFiles/"+cell.getRow().getData().ID,'_blank');
       },
+    },
+    {
+      formatter: success,
+      title: "Action",
+      width: 138,
+      hozAlign: "center",
     },
   ],
 });
