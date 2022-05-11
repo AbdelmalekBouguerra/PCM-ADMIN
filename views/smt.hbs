@@ -1,11 +1,11 @@
-{{!-- PRESTATIONS_CMS --}}
+{{!-- Liste des structures Médecine du travail --}}
 <html lang="en">
 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Prestations CMS</title>
+  <title>Liste des structures Médecine du travail</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css" />
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
@@ -29,7 +29,7 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-            <h3 class="page-title">Prestations assurées au niveau des CMS</h3>
+            <h3 class="page-title">Liste des structures Médecine du travail</h3>
           </div>
 
           <div class="row">
@@ -38,12 +38,12 @@
                 <div class="card-body">
                   <p class="card-description">card description
                   </p>
-                  <div id="pc-table"></div>
+                  <div id="smt-table"></div>
                   <div id="btn"></div>
                   <button type="button" class="btn btn-inverse-success btn-fw m-2" id="add-row">
                     <i class="mdi mdi-plus">Ajouter</i>
                   </button>
-                  <form method="post" action="/deletePC" onsubmit='if (!confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
+                  <form method="post" action="/deleteSMT" onsubmit='if (!confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
                     return false;
                     }'>
                     <input type="hidden" name="selectedRowsForDel" id="selectedRowsForDel" />
@@ -80,7 +80,7 @@
   <!-- Custom js for this page -->
   <script type="text/javascript" src="/vendors/tabulator-master/dist/js/tabulator.min.js"></script>
 
-  <script src="/js/tables/pc_table.js"></script>
+  <script src="/js/tables/smt_table.js"></script>
   <!-- End custom js for this page -->
 </body>
 

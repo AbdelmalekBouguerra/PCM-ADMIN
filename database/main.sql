@@ -11,23 +11,27 @@ OR ISNULL(ID_AGENT1);
 
 
 
-CREATE TABLE MÉDECINE_TRAVAIL(  
-    id int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
-    Actes VARCHAR(255),
-    Structures VARCHAR(2000),
-    ADRESSE VARCHAR(2000),
-    TEL VARCHAR(255)
+CREATE TABLE STRUCTURES_TIERS_PAYANT(  
+    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+    CODE int NOT NULL,
+    STRUCTURES VARCHAR(2000),
+    ADRESSE VARCHAR(2000)
 ) DEFAULT CHARSET UTF8;
+-- mysql --local-infile=1 -u root -p1
 
-LOAD DATA LOCAL INFILE  
-    '/home/abdelmalek/projects/PCM-ADMIN/database/csv/medecin_travail.csv'
-    INTO TABLE MÉDECINE_TRAVAIL  
-    FIELDS TERMINATED BY ',' 
-    ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
-    IGNORE 1 ROWS
-    (Actes,Structures,ADRESSE,TEL);
-END;
+-- LOAD DATA LOCAL INFILE  
+--     '/home/abdelmalek/projects/PCM-ADMIN/database/csv/structures_tiers_payant.csv'
+--     INTO TABLE STRUCTURES_TIERS_PAYANT  
+--     FIELDS TERMINATED BY ',' 
+--     ENCLOSED BY '"'
+--     LINES TERMINATED BY '\n'
+--     IGNORE 1 ROWS
+--     (CODE,STRUCTURES,ADRESSE);
+-- END;
+-- restarting id to 0
+    SET  @num := 0;
+    UPDATE MEDECINS_CONVENTIONNES SET id = @num := (@num+1);
+    ALTER TABLE MEDECINS_CONVENTIONNES AUTO_INCREMENT =1;
 
 
 

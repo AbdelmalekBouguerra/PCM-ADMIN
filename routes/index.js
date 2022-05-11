@@ -5,6 +5,7 @@ const express = require("express");
 const res = require("express/lib/response");
 const mc_table = require("../controllers/mc_table");
 const pc_table = require("../controllers/pc_table");
+const smt_table = require("../controllers/smt_table");
 const router = express.Router();
 
 var user;
@@ -44,6 +45,8 @@ router.get("/shtab", (req, res) => {
 });
 // to get sh table
 router.route("/sh").get(emp_table.get).post(emp_table.post);
+
+
 // MEDECINS_CONVENTIONNES table routes====================
 router.get("/Medecins_conventionnes", (req, res) => {
   user = req.session.user;
@@ -71,6 +74,22 @@ router.get("/Prestations_cms", (req, res) => {
 router.route("/PC").get(pc_table.get).post(pc_table.post);
 router.post("/deletePC", pc_table.delete);
 // -------------------------------------------------------
+
+// Liste des structures Médecine du travail ==============
+router.get("/Structures_Medecine_du_travail", (req, res) => {
+  user = req.session.user;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("smt", {
+    FirstName: Fl,
+    LastName: Ln,
+  });
+});
+router.route("/SMT").get(smt_table.get).post(smt_table.post);
+router.post("/deleteSMT", smt_table.delete);
+// -------------------------------------------------------
+
+
 router.get("/DPC", (req, res) => {
   res.render("DPC");
 });
