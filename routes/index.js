@@ -7,6 +7,7 @@ const mc_table = require("../controllers/mc_table");
 const pc_table = require("../controllers/pc_table");
 const smt_table = require("../controllers/smt_table");
 const stp_table = require("../controllers/stp_table");
+const act_table = require("../controllers/act_table");
 const router = express.Router();
 
 var user;
@@ -104,6 +105,19 @@ router.route("/STP").get(stp_table.get).post(stp_table.post);
 router.post("/deleteSTP", stp_table.delete);
 // ----------------------------------------------------------
 
+// Liste des acts ==========================================
+router.get("/Acts", (req, res) => {
+  user = req.session.user;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("act", {
+    FirstName: Fl,
+    LastName: Ln,
+  });
+});
+router.route("/ACT").get(act_table.get).post(act_table.post);
+router.post("/deleteACT", act_table.delete);
+// ----------------------------------------------------------
 
 
 router.get("/DPC", (req, res) => {
