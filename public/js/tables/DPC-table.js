@@ -86,7 +86,7 @@ var table = new Tabulator("#DPC-table", {
       width: 118 ,
       hozAlign: "center",
       cellClick: function (e, cell) {
-        window.open("https://localhost:3030/dpcFiles/"+cell.getRow().getData().ID,'_blank');
+        window.open("https://localhost:3031/demande/"+cell.getRow().getData().NUM_DPC,'_blank');
       },
     },
     {
