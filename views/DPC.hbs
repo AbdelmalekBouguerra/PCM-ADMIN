@@ -14,7 +14,7 @@
   <!-- End layout styles -->
   <link rel="shortcut icon" href="/images/favicon.png" />
 
-    <link href="/vendors/tabulator-master/dist/css/tabulator_midnight.min.css" rel="stylesheet">
+  <link href="/vendors/tabulator-master/dist/css/tabulator_midnight.min.css" rel="stylesheet">
 
 </head>
 
@@ -33,26 +33,55 @@
           <div class="page-header">
             <h3 class="page-title">DPC en cours de traitement</h3>
           </div>
-          
-          <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-description"> card-description </p>
-                  {{!-- <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                    <select class="form-control" style="width: 200px;" id="filter-field">
-                      <option value="CODE" selected>Code Mnémonique</option>
-                      <option value="STRUCTURE">Structures</option>
-                    </select>
-                    <input type="text" id="filter-value" class="form-control" placeholder="Search products">
-                  </div> --}}
-                  <div id="DPC-table"></div>
+          <p>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#tab1"
+              aria-expanded="false" aria-controls="tab1">
+              en cours de traitement
+            </button>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#tab2"
+              aria-expanded="false" aria-controls="tab2">
+              tab2
+            </button>
+
+          </p>
+          <div id="content">
+            <div class="row collapse" id="tab1">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-description"> card-description </p>
+                    {{!-- <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                      <select class="form-control" style="width: 200px;" id="filter-field">
+                        <option value="CODE" selected>Code Mnémonique</option>
+                        <option value="STRUCTURE">Structures</option>
+                      </select>
+                      <input type="text" id="filter-value" class="form-control" placeholder="Search products">
+                    </div> --}}
+                    <div id="DPC-table"></div>
+                  </div>
                 </div>
               </div>
+              {{!-- <div class="col-lg-6 grid-margin stretch-card align-content-center" id="btn"></div> --}}
             </div>
-            {{!-- <div class="col-lg-6 grid-margin stretch-card align-content-center" id="btn"></div> --}}
+            <div class="row collapse" id="tab2">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-description"> card-description </p>
+                    {{!-- <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                      <select class="form-control" style="width: 200px;" id="filter-field">
+                        <option value="CODE" selected>Code Mnémonique</option>
+                        <option value="STRUCTURE">Structures</option>
+                      </select>
+                      <input type="text" id="filter-value" class="form-control" placeholder="Search products">
+                    </div> --}}
+                    <div id="DPC-table"></div>
+                  </div>
+                </div>
+              </div>
+              {{!-- <div class="col-lg-6 grid-margin stretch-card align-content-center" id="btn"></div> --}}
+            </div>
           </div>
-
         </div>
         <!-- content-wrapper ends -->
 
@@ -65,7 +94,22 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+  <script>
+    // close other collapse div when another collapse is opened.
+    let ele = [...document.querySelectorAll('button[data-bs-toggle="collapse"]')];
+    ele.forEach((value) => {
+      value.addEventListener('click', (e) => {
+        let elements = document.querySelector("#content").childNodes;
+        elements.forEach((child) => {
+          if (!child.id == value.id) {
+            child.classList.remove("show");
+        }
+      })
+      let att = value.getAttribute('data-bs-target');
+      console.log(att);
+    })})
 
+  </script>
   <!-- plugins:js -->
   <script src="/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->

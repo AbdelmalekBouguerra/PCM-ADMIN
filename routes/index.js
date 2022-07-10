@@ -22,8 +22,8 @@ router
   .route("/dashboard")
   .post(auth.login)
   .get((req, res) => {
-    if (req.session.isAuth) {
-      user = req.session.user;
+    if (req.session.isAdminAuth) {
+      user = req.session.adminUser;
       Fl = user.PRENOM.charAt(0).toUpperCase();
       Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
       res.render("dashboard", { user: user, FirstName: Fl, LastName: Ln });
@@ -37,7 +37,7 @@ router
 router.get("/shtab", (req, res) => {
   // todo change the mothed how you are passing user data
   // todo add a auth test
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("sh", {
@@ -51,7 +51,7 @@ router.route("/sh").get(emp_table.get).post(emp_table.post);
 
 // MEDECINS_CONVENTIONNES table routes====================
 router.get("/Medecins_conventionnes", (req, res) => {
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("MC", {
@@ -65,7 +65,7 @@ router.post("/deleteMC", mc_table.delete);
 
 // PRESTATIONS_CMS =======================================
 router.get("/Prestations_cms", (req, res) => {
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("PC", {
@@ -79,7 +79,7 @@ router.post("/deletePC", pc_table.delete);
 
 // Liste des structures Médecine du travail =================
 router.get("/Structures_Medecine_du_travail", (req, res) => {
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("smt", {
@@ -93,7 +93,7 @@ router.post("/deleteSMT", smt_table.delete);
 
 // Liste des structures Tiers payant ========================
 router.get("/Structures_Tiers_payant", (req, res) => {
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("stp", {
@@ -107,7 +107,7 @@ router.post("/deleteSTP", stp_table.delete);
 
 // Liste des acts ==========================================
 router.get("/Acts", (req, res) => {
-  user = req.session.user;
+  user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("act", {
