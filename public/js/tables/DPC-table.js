@@ -10,12 +10,13 @@ var docIcon = function (cell, formatterParams) {
 
 var success = function (cell, formatterParams) {
   //plain text value
-  return (
-    '<button type="button" class="btn btn-inverse-success btn-icon">' +
-    '<i class="mdi mdi mdi-check" style="margin-right: 0px;"></i></button>' +
-    '<button type="button" class="btn btn-inverse-danger btn-icon" style="margin-left: 10px;">' +
-    '<i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>'
-  );
+  return `
+    <button type="button" class="btn btn-inverse-success btn-icon" 
+    data-id="${cell.getRow().getData().ID}" onclick="confirmation(this)">
+    <i class="mdi mdi mdi-check" style="margin-right: 0px;"></i></button>
+    <button type="button" class="btn btn-inverse-danger btn-icon" style="margin-left: 10px;">
+    <i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>
+  `;
 };
 
 // initialize table
@@ -23,10 +24,6 @@ var table = new Tabulator("#DPC-table", {
   height: "500px",
   ajaxURL: "https://localhost:3030/DPCtable", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
-  ajaxError: function (error) {
-    //error - fetch response object
-    console.log(error);
-  },
   layout: "fitColumns",
   progressiveLoad: "scroll",
   autoColumns: false, //create columns from data field names
@@ -61,21 +58,21 @@ var table = new Tabulator("#DPC-table", {
     },
     {
       title: "Agent",
-      field: "VALIDATION",
+      field: "VALIDATION_AGENT",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
     },
     {
       title: "Chef Region",
-      field: "VALIDATION",
+      field: "VALIDATION_CHEFREGION",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
     },
     {
       title: "Directeur",
-      field: "VALIDATION",
+      field: "VALIDATION_DIRECTEUR",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
@@ -83,10 +80,13 @@ var table = new Tabulator("#DPC-table", {
     {
       title: "pièce jointe",
       formatter: docIcon,
-      width: 118 ,
+      width: 118,
       hozAlign: "center",
       cellClick: function (e, cell) {
-        window.open("https://localhost:3031/demande/"+cell.getRow().getData().NUM_DPC,'_blank');
+        window.open(
+          "https://localhost:3031/demande/" + cell.getRow().getData().NUM_DPC,
+          "_blank"
+        );
       },
     },
     {
@@ -98,6 +98,28 @@ var table = new Tabulator("#DPC-table", {
   ],
 });
 
-table.on("cellEdited", function (cell) {
-  console.log(table.getRow(15).getData());
-});
+// confirm button listener.
+function confirmation(ele) {
+  var id = { id: ele.dataset.id };
+  console.log("id: " + JSON.stringify(id));
+  // console.log("input : ", input.value);
+  if (confirm("êtes-vous sûr de vouloir accepte cette demande!")) {
+    $.ajax({
+      url: "/DPC/agent/confirm", // Url of backend (can be python, php, etc..)
+      type: "POST", // data type (can be get, post, put, delete)
+      data: JSON.stringify(id),
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+      success: function (response, textStatus, jqXHR) {
+        console.log(response);
+        table.setData();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+      },
+    });
+  } else return false;
+}

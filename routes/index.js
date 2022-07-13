@@ -33,10 +33,8 @@ router
       });
     }
   });
-
+// Sh table routes==========================================
 router.get("/shtab", (req, res) => {
-  // todo change the mothed how you are passing user data
-  // todo add a auth test
   user = req.session.adminUser;
   Fl = user.PRENOM.charAt(0).toUpperCase();
   Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
@@ -45,9 +43,8 @@ router.get("/shtab", (req, res) => {
     LastName: Ln,
   });
 });
-// to get sh table
 router.route("/sh").get(emp_table.get).post(emp_table.post);
-
+// ---------------------------------------------------------
 
 // MEDECINS_CONVENTIONNES table routes====================
 router.get("/Medecins_conventionnes", (req, res) => {
@@ -119,13 +116,17 @@ router.route("/ACT").get(act_table.get).post(act_table.post);
 router.post("/deleteACT", act_table.delete);
 // ----------------------------------------------------------
 
-
+// Liste des Demande prise en charge =======================
 router.get("/DPC", (req, res) => {
+  user = req.session.adminUser;
+  Fl = user.PRENOM.charAt(0).toUpperCase();
+  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("DPC");
 });
-
 router.post("/deleteSH", emp_table.delete);
-
 router.route("/DPCtable").get(dpc.get);
+// ---------------------------------------------------------
+
+router.route("/DPC/agent/confirm").post(dpc.confirm);
 
 module.exports = router;
