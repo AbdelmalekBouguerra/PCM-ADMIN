@@ -127,6 +127,6 @@ router.post("/deleteSH", emp_table.delete);
 router.route("/DPCtable").get(dpc.get);
 // ---------------------------------------------------------
 
-router.route("/DPC/agent/confirm").post(dpc.confirm);
+router.route("/DPC/confirm").post(dpc.confirm);
 
 module.exports = router;

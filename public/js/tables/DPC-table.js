@@ -105,7 +105,7 @@ function confirmation(ele) {
   // console.log("input : ", input.value);
   if (confirm("êtes-vous sûr de vouloir accepte cette demande!")) {
     $.ajax({
-      url: "/DPC/agent/confirm", // Url of backend (can be python, php, etc..)
+      url: "/DPC/confirm", // Url of backend (can be python, php, etc..)
       type: "POST", // data type (can be get, post, put, delete)
       data: JSON.stringify(id),
       dataType: "json",
