@@ -421,6 +421,7 @@ class Persistence extends Module{
 				if(this.config.columns === true || this.config.columns == undefined){
 					keys =  Object.keys(colDef);
 					keys.push("width");
+					keys.push("visible");
 				}else{
 					keys = this.config.columns;
 				}
@@ -451,7 +452,7 @@ class Persistence extends Module{
 
 Persistence.moduleName = "persistence";
 
-Persistence.moduleInitOrder = 1;
+Persistence.moduleInitOrder = -10;
 
 //load defaults
 Persistence.readers = defaultReaders;

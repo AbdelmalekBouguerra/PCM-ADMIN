@@ -1,60 +1,135 @@
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>DPC-PCM</title>
-    <!-- plugins:css -->
-    <link
-      rel="stylesheet"
-      href="/vendors/mdi/css/materialdesignicons.min.css"
-    />
-    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
 
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="/css/style.css" />
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="/images/favicon.png" />
-  </head>
-  <body>
-    <div class="container-scroller">
-      <!-- sidebar partial -->
-      {{> _sidebar}}
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>DPC-PCM</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
 
-      <div class="container-fluid page-body-wrapper">
-        <!-- navbar partial -->
-        {{> _navbar}}
-        <div class="main-panel">
-          <div class="content-wrapper">
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="/images/favicon.png" />
+
+  <link href="/vendors/tabulator-master/dist/css/tabulator_midnight.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- sidebar partial -->
+    {{> _sidebar}}
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- navbar partial -->
+      {{> _navbar}}
+      <div class="main-panel">
+        <!-- content-wrapper -->
+        <div class="content-wrapper">
+          {{!-- page title --}}
+          <div class="page-header">
+            <h3 class="page-title">Demande prise en charge médicale</h3>
           </div>
-          <!-- content-wrapper ends -->
-
-          <!-- footer partial -->
-          {{> _footer}}
-
+          <button class="btn  btn-inverse-primary btn-fw" type="button" data-bs-toggle="collapse" data-bs-target="#tab1"
+            aria-expanded="false" aria-controls="tab1">
+            En cours de traitement
+          </button>
+          <button class="btn btn-inverse-primary btn-fw" type="button" data-bs-toggle="collapse" data-bs-target="#tab2"
+            aria-expanded="false" aria-controls="tab2" style="margin-left: 20px;">
+            Traite par vous
+          </button>
+          <div class="mt-4" id="content">
+            <div class="row collapse" id="tab1">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-description"> card-description </p>
+                    {{!-- <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                      <select class="form-control" style="width: 200px;" id="filter-field">
+                        <option value="CODE" selected>Code Mnémonique</option>
+                        <option value="STRUCTURE">Structures</option>
+                      </select>
+                      <input type="text" id="filter-value" class="form-control" placeholder="Search products">
+                    </div> --}}
+                    <div id="DPC-table"></div>
+                  </div>
+                </div>
+              </div>
+              {{!-- <div class="col-lg-6 grid-margin stretch-card align-content-center" id="btn"></div> --}}
+            </div>
+            <div class="row collapse" id="tab2">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-description"> card-description </p>
+                    {{!-- <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                      <select class="form-control" style="width: 200px;" id="filter-field">
+                        <option value="CODE" selected>Code Mnémonique</option>
+                        <option value="STRUCTURE">Structures</option>
+                      </select>
+                      <input type="text" id="filter-value" class="form-control" placeholder="Search products">
+                    </div> --}}
+                    <div id="DPC-table"></div>
+                  </div>
+                </div>
+              </div>
+              {{!-- <div class="col-lg-6 grid-margin stretch-card align-content-center" id="btn"></div> --}}
+            </div>
+          </div>
         </div>
-        <!-- main-panel ends -->
+        <!-- content-wrapper ends -->
+
+        <!-- footer partial -->
+        {{> _footer}}
+
       </div>
-      <!-- page-body-wrapper ends -->
+      <!-- main-panel ends -->
     </div>
-    <!-- container-scroller -->
-    
-    <!-- plugins:js -->
-    <script src="/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <script>
+    // close other collapse div when another collapse is opened.
+    let ele = [...document.querySelectorAll('button[data-bs-toggle="collapse"]')];
+    ele.forEach((value) => {
+      value.addEventListener('click', (e) => {
+        let elements = document.querySelector("#content").childNodes;
+        elements.forEach((child) => {
+          if (!child.id == value.id) {
+            child.classList.remove("show");
+          }
+        })
+        let att = value.getAttribute('data-bs-target');
+        console.log(att);
+      })
+    })
+    // show msg when there is no data available.
+    document.body.addEventListener('click', function () {
+      if (table.getData().length == 0) {
+        console.log("No data available");
+        table.alert("il n'y a pas de demande pour le moment faites une pause :)");
+      }
+    }, true);
+  </script>
+  <!-- plugins:js -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
 
-    <!-- inject:js -->
-    <script src="/js/off-canvas.js"></script>
-    <script src="/js/hoverable-collapse.js"></script>
-    <script src="/js/misc.js"></script>
-    <script src="/js/settings.js"></script>
-    <script src="/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
+  <!-- inject:js -->
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script type="text/javascript" src="/vendors/tabulator-master/dist/js/tabulator.min.js"></script>
+  <script src="/js/tables/DPC-table.js"></script>
+  <!-- End custom js for this page -->
 
-    <!-- End custom js for this page -->
-  </body>
+</body>
+
 </html>

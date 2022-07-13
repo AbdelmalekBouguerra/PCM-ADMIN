@@ -1,36 +1,34 @@
-//! bug when updating existing row
 function deletRow() {
   // var input = document.getElementById("hiddenInput");
   // input.value = JSON.stringify(id_empTable);
   console.log("json", id_empTable);
   // console.log("input : ", input.value);
-  if(confirm('êtes-vous sûr de vouloir ajouter ces lignes!')){
+  if (confirm("êtes-vous sûr de vouloir ajouter ces lignes!")) {
     $.ajax({
-      url : "/sh", // Url of backend (can be python, php, etc..)
+      url: "/PC", // Url of backend (can be python, php, etc..)
       type: "POST", // data type (can be get, post, put, delete)
       data: JSON.stringify(id_empTable),
-      dataType: 'json',
-      contentType: 'application/json; charset=utf-8',
-      async : false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
-      success: function(response, textStatus, jqXHR) {
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+      success: function (response, textStatus, jqXHR) {
         console.log(response);
         table.setData();
       },
       error: function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
-      }
-  });
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+      },
+    });
   } else return false;
-    
 }
 function showBtn() {
   var ele = document.getElementById("btn");
 
   ele.innerHTML =
     '<button type="button" onClick="deletRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
-    '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>' ;
+    '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>';
 }
 function showDeleteBtn() {}
 var id_empTable = [];
@@ -39,21 +37,20 @@ var json_emp = {};
 // FIX : test if is it changed or not to save the new value.
 
 //initialize table
-var table = new Tabulator("#example-table", {
+var table = new Tabulator("#pc-table", {
   scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
-  height:"500px",
-  ajaxURL: "https://localhost:3030/sh", //ajax URL
+  height: "500px",
+  ajaxURL: "https://localhost:3030/PC", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
   ajaxError: function (error) {
     //error - fetch response object
   },
   layout: "fitColumns",
-  progressiveLoad:"scroll",
-  // data: data, //assign data to table
+  progressiveLoad: "scroll",
   autoColumns: false, //create columns from data field names
   history: true,
   placeholder: "No Data Set",
-  index:"ID",
+  index: "ID",
   columns: [
     {
       formatter: "rowSelection",
@@ -65,19 +62,27 @@ var table = new Tabulator("#example-table", {
         cell.getRow().toggleSelect();
       },
     },
-    { title: "Id", field: "ID", width: 70, sorter: "number" },
+    { title: "Id", field: "ID", width: 53, sorter: "number" },
     {
-      title: "Code Mnémonique",
-      field: "CODE",
-      width: 197,
+      title: "Specialite",
+      field: "SPECIALITE",
+      width: 203,
       editor: "input",
       sorter: "string",
     },
     {
-      title: "Structures",
-      field: "STRUCTURE",
+      title: "Cms_boumerdes",
+      field: "CMS_BOUMERDES",
       editor: "input",
-      sorter: "string",
+      formatter: "tickCross",
+      hozAlign: "center",
+    },
+    {
+      title: "Cms_tizi_ouzou",
+      field: "CMS_TIZI_OUZOU",
+      editor: "input",
+      formatter: "tickCross",
+      hozAlign: "center",
     },
   ],
 });
@@ -88,7 +93,7 @@ table.on("cellEdited", function (cell) {
 
   id_empTable.push(json_emp);
   json_emp = {};
-  console.log(id_empTable)
+  console.log(id_empTable);
   showBtn();
 });
 table.on("rowSelected", function (row) {
@@ -103,8 +108,8 @@ table.on("rowSelected", function (row) {
 document.getElementById("add-row").addEventListener("click", function () {
   var rowCount = table.getDataCount();
   // we add +'' to make the ID a string cuz our controller test if string it update else insert
-  table.addRow({ID : rowCount+1+''});
-  table.scrollToRow(rowCount+1, "middle",true);
+  table.addRow({ ID: rowCount + 1 + "" });
+  table.scrollToRow(rowCount + 1, "middle", true);
   table.redraw();
 });
 
@@ -155,4 +160,3 @@ document
   .getElementById("filter-field")
   .addEventListener("change", updateFilter);
 document.getElementById("filter-value").addEventListener("keyup", updateFilter);
-
