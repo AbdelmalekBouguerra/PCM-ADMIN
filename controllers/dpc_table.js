@@ -3,20 +3,25 @@ const { query } = require("../env/db");
 const db = require("../env/db");
 
 function getDPC(ID, ROLE, callback) {
-  var query;
+  var query =
+    "SELECT ID,NUM_DPC,(SELECT MATRICULE FROM `DEMANDEUR` AS D WHERE ID_DEMANDEUR = D.ID)" +
+    "as MATRICULE_DEM,IF( ISNULL(ID_BENEFICIAIRE),'Lui-même',(SELECT LIEN_PARENTE FROM `BÉNÉFICIAIRE`" +
+    "AS B WHERE ID_BENEFICIAIRE = B.ID)) as LIEN_PARENTE_BEN,STRUCTURE,ACT,STATU_DPC," +
+    "IF( ISNULL(ID_AGENT),'false','true') as VALIDATION_AGENT," +
+    "IF( ISNULL(ID_CHEFREGION),'false','true') as VALIDATION_CHEFREGION, " +
+    "IF( ISNULL(ID_DIRECTEUR),'false','true') as VALIDATION_DIRECTEUR  " +
+    "FROM `DPC`";
   if (ROLE === "AGENT") {
-    query =
-      "SELECT ID,NUM_DPC,(SELECT MATRICULE FROM `DEMANDEUR` AS D WHERE ID_DEMANDEUR = D.ID)" +
-      "as MATRICULE_DEM,IF( ISNULL(ID_BENEFICIAIRE),'Lui-même',(SELECT LIEN_PARENTE FROM `BÉNÉFICIAIRE`" +
-      "AS B WHERE ID_BENEFICIAIRE = B.ID)) as LIEN_PARENTE_BEN,STRUCTURE,ACT,STATU_DPC," +
-      "IF(ID_AGENT = ?,'true','false') as VALIDATION_AGENT," +
-      "IF( ISNULL(ID_CHEFREGION),'false','true') as VALIDATION_CHEFREGION, " +
-      "IF( ISNULL(ID_DIRECTEUR),'false','true') as VALIDATION_DIRECTEUR  " +
-      "FROM `DPC`" +
-      "WHERE ISNULL(ID_AGENT) ORDER BY ID";
+    query += "WHERE ISNULL(ID_AGENT) ORDER BY ID";
+  } else if (ROLE === "CHEFREGION") {
+    query += "WHERE ISNULL(ID_CHEFREGION) AND ID_AGENT IS NOT NULL ORDER BY ID";
+  } else if (ROLE === "DIRECTEUR") {
+    query +=
+      "WHERE ISNULL(ID_DIRECTEUR) AND ID_AGENT IS NOT NULL AND ID_CHEFREGION IS NOT NULL " +
+      "ORDER BY ID";
   }
 
-  db.query(query, [ID, ID], (err, results) => {
+  db.query(query, (err, results) => {
     if (err) console.log(err);
     else callback(results);
   });
