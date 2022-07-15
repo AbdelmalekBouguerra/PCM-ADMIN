@@ -102,6 +102,127 @@ var table = new Tabulator("#DPC-table", {
   ],
 });
 
+
+var tableAll = new Tabulator("#DPC-table-all", {
+  height: "500px",
+  ajaxURL: "https://localhost:3030/DPCAlltable", //ajax URL
+  ajaxConfig: "GET", //ajax HTTP request type
+  layout: "fitColumns",
+  progressiveLoad: "scroll",
+  autoColumns: false, //create columns from data field names
+  history: true,
+  placeholder: "No Data Set",
+  index: "ID",
+  columns: [
+    { title: "Id", field: "ID", width: 48, sorter: "number" },
+    {
+      title: "Demandeur",
+      field: "MATRICULE_DEM",
+      width: 116,
+      sorter: "string",
+    },
+    {
+      title: "Lien de parente du Ben",
+      field: "LIEN_PARENTE_BEN",
+      width: 157,
+      sorter: "string",
+    },
+    {
+      title: "Structure",
+      field: "STRUCTURE",
+      width: 146,
+      sorter: "string",
+    },
+    {
+      title: "Act",
+      field: "ACT",
+      width: 146,
+      sorter: "string",
+    },
+    {
+      title: "pièce jointe",
+      formatter: docIcon,
+      width: 118,
+      hozAlign: "center",
+      cellClick: function (e, cell) {
+        window.open(
+          "https://localhost:3031/demande/" + cell.getRow().getData().NUM_DPC,
+          "_blank"
+        );
+      },
+    },
+    {
+      title: "Statut",
+      field: "STATU_DPC",
+      width: 145,
+      sorter: "string",
+    },
+  ],
+});
+
+/* 
+  Création d'un tableau avec l'id `DPC-table-rejected` qui contiene les demande rejetées
+  d'apres le route 'https://localhost:3030/DPCAlltable
+*/
+var tableRejected = new Tabulator("#DPC-table-rejected", {
+  height: "500px",
+  ajaxURL: "https://localhost:3030/DPCRejectedtable", //ajax URL
+  ajaxConfig: "GET", //ajax HTTP request type
+  layout: "fitColumns",
+  progressiveLoad: "scroll",
+  autoColumns: false, //create columns from data field names
+  history: true,
+  placeholder: "No Data Set",
+  index: "ID",
+  columns: [
+    { title: "Id", field: "ID", width: 48, sorter: "number" },
+    {
+      title: "Demandeur",
+      field: "MATRICULE_DEM",
+      width: 116,
+      sorter: "string",
+    },
+    {
+      title: "Lien de parente du Ben",
+      field: "LIEN_PARENTE_BEN",
+      width: 157,
+      sorter: "string",
+    },
+    {
+      title: "Structure",
+      field: "STRUCTURE",
+      width: 146,
+      sorter: "string",
+    },
+    {
+      title: "Act",
+      field: "ACT",
+      width: 146,
+      sorter: "string",
+    },
+    {
+      title: "pièce jointe",
+      formatter: docIcon,
+      width: 118,
+      hozAlign: "center",
+      cellClick: function (e, cell) {
+        window.open(
+          "https://localhost:3031/demande/" + cell.getRow().getData().NUM_DPC,
+          "_blank"
+        );
+      },
+    },
+    {
+      title: "motif de rejet",
+      field: "REJECTION",
+      width: 300,
+      hozAlign:"center",
+      headerHozAlign: "center",
+      sorter: "string",
+    },
+  ],
+});
+
 /**
  * It takes an element as an argument, gets the id of the element, sends it to the backend, and then
  * updates the table

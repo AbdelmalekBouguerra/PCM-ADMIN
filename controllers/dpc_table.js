@@ -1,15 +1,14 @@
 /* Importation de la connexion à la base de données. */
 const db = require("../env/db");
-
+/**
+ * Elle renvoie tous les DPC qui ne sont pas encore validés par l'administrateur avec l'ID donné
+ *
+ * Args:
+ *   ID: L'identifiant de l'administrateur.
+ *   ROLE: Le rôle de l'administrateur.
+ *   callback: Une fonction qui sera appelée lorsque la requête sera terminée.
+ */
 function getDPC(ID, ROLE, callback) {
-  /**
-   * Il renvoie tous les DPC qui ne sont pas encore validés par l'administrateur avec l'ID donné
-   *
-   * Args:
-   *   ID: L'identifiant de l'administrateur.
-   *   ROLE: Le rôle de l'administrateur.
-   *   callback: Une fonction qui sera appelée lorsque la requête sera terminée.
-   */
   var query =
     "SELECT ID,NUM_DPC,(SELECT MATRICULE FROM `DEMANDEUR` AS D WHERE ID_DEMANDEUR = D.ID)" +
     "as MATRICULE_DEM,IF( ISNULL(ID_BENEFICIAIRE),'Lui-même',(SELECT LIEN_PARENTE FROM `BÉNÉFICIAIRE`" +
@@ -18,7 +17,9 @@ function getDPC(ID, ROLE, callback) {
     "IF( ISNULL(ID_CHEFREGION),'false','true') as VALIDATION_CHEFREGION, " +
     "IF( ISNULL(ID_DIRECTEUR),'false','true') as VALIDATION_DIRECTEUR  " +
     "FROM `DPC`";
-  /* Checking the role of the admin and then adding a condition to the query. */
+
+  /* Une requête qui est utilisée pour obtenir tous les DPC qui ne sont pas encore validés par
+l'administrateur avec le role donné. */
   if (ROLE === "AGENT") {
     query += "WHERE ISNULL(ID_AGENT) AND STATU_DPC = 'processing' ORDER BY ID";
   } else if (ROLE === "CHEFREGION") {
@@ -39,7 +40,43 @@ function getDPC(ID, ROLE, callback) {
 }
 
 /**
- * Il met à jour la table DPC avec l'ID de l'agent qui a confirmé la demande
+ * Il obtient tous les DPC de la base de données.
+ *
+ * Args:
+ *   callback: La fonction de rappel qui sera appelée lorsque la requête sera terminée.
+ */
+function getAllDPC(callback) {
+  var query =
+    "SELECT ID,NUM_DPC,(SELECT MATRICULE FROM `DEMANDEUR` AS D WHERE ID_DEMANDEUR = D.ID)" +
+    "as MATRICULE_DEM,IF( ISNULL(ID_BENEFICIAIRE),'Lui-même',(SELECT LIEN_PARENTE FROM `BÉNÉFICIAIRE`" +
+    "AS B WHERE ID_BENEFICIAIRE = B.ID)) as LIEN_PARENTE_BEN,STRUCTURE,ACT,STATU_DPC " +
+    "FROM `DPC`";
+  db.query(query, (err, results) => {
+    if (err) console.log(err);
+    else callback(results);
+  });
+}
+
+/**
+ * Elle renvoie tous les DPC qui ont été rejetés.
+ * 
+ * Args:
+ *   callback: une fonction qui sera appelée lorsque la requête sera terminée.
+ */
+function getRejectedDPC(callback) {
+  var query =
+    "SELECT ID,NUM_DPC,(SELECT MATRICULE FROM `DEMANDEUR` AS D WHERE ID_DEMANDEUR = D.ID)" +
+    "as MATRICULE_DEM,IF( ISNULL(ID_BENEFICIAIRE),'Lui-même',(SELECT LIEN_PARENTE FROM `BÉNÉFICIAIRE`" +
+    "AS B WHERE ID_BENEFICIAIRE = B.ID)) as LIEN_PARENTE_BEN,STRUCTURE,ACT,STATU_DPC,REJECTION " +
+    "FROM `DPC` WHERE STATU_DPC = 'rejected'";
+  db.query(query, (err, results) => {
+    if (err) console.log(err);
+    else callback(results);
+  });
+}
+
+/**
+ * Elle met à jour la table DPC avec l'ID de l'agent qui a confirmé la demande
  *
  * Args:
  *   ID: L'identifiant du demande
@@ -84,6 +121,17 @@ function confirmDPC(ID, ROLE, ID_AGENT, callback) {
   }
 }
 
+/**
+ * Elle met à jour la table DPC avec l'ID de l'agent qui l'a rejeté, le statut du DPC est défini sur
+ * rejeté (rejected) et la raison du rejet est définie (REJECTION col)
+ *
+ * Args:
+ *   ID: ID du DPC à rejeter.
+ *   ROLE: Le rôle de l'administrateur qui rejette le DPC.
+ *   motifRejet: Le motif du rejet.
+ *   ID_AGENT: ID de l'agent qui rejette le DPC.
+ *   callback: une fonction qui sera appelée lorsque la requête sera terminée.
+ */
 function rejectDPC(ID, ROLE, motifRejet, ID_AGENT, callback) {
   /* Checking if the role of the admin is agent. */
   if (ROLE === "AGENT") {
@@ -121,12 +169,22 @@ function rejectDPC(ID, ROLE, motifRejet, ID_AGENT, callback) {
   }
 }
 
-/* Exportation des fonctions get et confirm. */
+/* Exportation les fonctions */
 module.exports = {
   get: (req, res) => {
     let ID = req.session.adminUser.ID;
     let ROLE = req.session.adminUser.ROLE;
     getDPC(ID, ROLE, (results) => {
+      res.json({ last_page: 1, data: results });
+    });
+  },
+  getAll: (req, res) => {
+    getAllDPC((results) => {
+      res.json({ last_page: 1, data: results });
+    });
+  },
+  getRejected: (req, res) => {
+    getRejectedDPC((results) => {
       res.json({ last_page: 1, data: results });
     });
   },
