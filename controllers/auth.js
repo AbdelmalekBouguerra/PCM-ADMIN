@@ -51,10 +51,6 @@ exports.login = (req, res) => {
     req.session.isAdminAuth = true; // bool value to check if user logged in
     getUser(username, (user) => {
       req.session.adminUser = user[0]; // save user information in session value
-      console.log(
-        "🚀 ~ file: auth.js ~ line 57 ~ getUser ~ req.session.adminUser",
-        req.session.adminUser
-      );
       req.session.adminUsername = username;
       var Fl = user[0].PRENOM.charAt(0).toUpperCase();
       var Ln = user[0].NOM.charAt(0).toUpperCase() + user[0].NOM.slice(1);

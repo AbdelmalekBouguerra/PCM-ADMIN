@@ -1,23 +1,30 @@
+/* Importation du module express. */
+const express = require("express");
+
+/* Importation des modules depuis le dossier controllers. */
 const emp_table = require("../controllers/emp_table");
 const auth = require("../controllers/auth");
 const dpc = require("../controllers/dpc_table");
-const express = require("express");
-const res = require("express/lib/response");
 const mc_table = require("../controllers/mc_table");
 const pc_table = require("../controllers/pc_table");
 const smt_table = require("../controllers/smt_table");
 const stp_table = require("../controllers/stp_table");
 const act_table = require("../controllers/act_table");
+
+/* Création d'un nouvel objet routeur. */
 const router = express.Router();
 
+/* Variable globale utilisée pour stocker le prénom et le nom de l'utilisateur. */
 var user;
 var Fl;
 var Ln;
 
+/* Il s'agit de la route de la page de connexion. */
 router.get("/", (req, res) => {
   res.render("login");
 });
 
+/* Un itinéraire pour la page du tableau de bord. */
 router
   .route("/dashboard")
   .post(auth.login)
@@ -127,6 +134,10 @@ router.post("/deleteSH", emp_table.delete);
 router.route("/DPCtable").get(dpc.get);
 // ---------------------------------------------------------
 
+/* traiter la demande de confirmation */
 router.route("/DPC/confirm").post(dpc.confirm);
+/* traiter la demande de rejet */
+router.route("/DPC/rejet").post(dpc.reject);
+
 
 module.exports = router;

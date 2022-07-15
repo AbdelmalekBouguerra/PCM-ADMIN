@@ -32,5 +32,14 @@
         "STATU",
         "TIZI"
     ],
-    "docwriter.style": "Google"
+    "docwriter.style": "Google",
+    "docwriter.progress.trackFunctions": true,
+    "docwriter.hotkey.mac": "⌥ + .",
+    "docwriter.progress.trackMethods": false,
+    "docwriter.progress.trackClasses": false,
+    "docwriter.progress.trackTypes": false,
+    "docwriter.language": "French",
+    "cSpell.enableFiletypes": [
+        "!javascript"
+    ]
 }

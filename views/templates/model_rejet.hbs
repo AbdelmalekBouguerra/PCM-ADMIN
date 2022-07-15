@@ -1,0 +1,26 @@
+<div class="modal fade" id="model_rejet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Motif de rejet</h4>
+                    <p class="card-description">Ajoutez pourquoi vous avez rejeté cette demande.</p>
+                        <div class="form-group">
+                            <textarea class="form-control" id="motifRejet"></textarea>
+                        </div>
+
+                        <button onclick="rejection(this);" class="btn btn-primary me-2">Envoyer</button>
+                        <button class="btn btn-dark" onclick="cancelModal(this);">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function cancelModal(ele) {
+        document.getElementById("motifRejet").value = "";
+        $('#model_rejet').modal('hide');
+    }
+</script>

@@ -81,7 +81,7 @@ var table = new Tabulator("#act-table", {
       title: "Montant global ttc",
       field: "MONTANT_GLOBAL_TTC",
       editor: "input",
-      sorter: "string",
+      sorter: "number",
     },
     {
       title: "Structures",

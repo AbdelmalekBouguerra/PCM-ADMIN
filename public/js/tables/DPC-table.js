@@ -1,3 +1,5 @@
+let idRejctionDemande;
+
 //Generate doc icon
 var docIcon = function (cell, formatterParams) {
   //plain text value'
@@ -14,7 +16,9 @@ var success = function (cell, formatterParams) {
     <button type="button" class="btn btn-inverse-success btn-icon" 
     data-id="${cell.getRow().getData().ID}" onclick="confirmation(this)">
     <i class="mdi mdi mdi-check" style="margin-right: 0px;"></i></button>
-    <button type="button" class="btn btn-inverse-danger btn-icon" style="margin-left: 10px;">
+    <button type="button" class="btn btn-inverse-danger btn-icon"
+    data-id="${cell.getRow().getData().ID}" onclick="rejectionModel(this)"
+     style="margin-left: 10px;">
     <i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>
   `;
 };
@@ -98,7 +102,13 @@ var table = new Tabulator("#DPC-table", {
   ],
 });
 
-// confirm button listener.
+/**
+ * It takes an element as an argument, gets the id of the element, sends it to the backend, and then
+ * updates the table
+ *
+ * Args:
+ *   ele: the element that was clicked
+ */
 function confirmation(ele) {
   var id = { id: ele.dataset.id };
   console.log("id: " + JSON.stringify(id));
@@ -113,6 +123,49 @@ function confirmation(ele) {
       async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
       success: function (response, textStatus, jqXHR) {
         console.log(response);
+        table.setData();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+      },
+    });
+  } else return false;
+}
+
+/**
+ * Elle montre un modal
+ *
+ * Args:
+ *   ele: L'élément qui a déclenché l'événement.
+ */
+function rejectionModel(ele) {
+  idRejctionDemande = ele.dataset.id;
+  $("#model_rejet").modal("show");
+}
+
+/**
+ * Il envoie une requête POST au backend avec l'id de la demande à rejeter
+ *
+ * Args:
+ *   ele: L'élément qui a été cliqué.
+ */
+function rejection(ele) {
+  const motifRejet = document.getElementById("motifRejet").value;
+  const data = { id: idRejctionDemande, motifRejet: motifRejet };
+  console.log(JSON.stringify(data));
+  if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
+    $.ajax({
+      url: "/DPC/rejet", // Url of backend
+      type: "POST", // data type (can be get, post, put, delete)
+      data: JSON.stringify(data),
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      async: false, // enable or disable async
+      success: function (response, textStatus, jqXHR) {
+        console.log(response);
+        $('#model_rejet').modal('hide');
         table.setData();
       },
       error: function (jqXHR, textStatus, errorThrown) {

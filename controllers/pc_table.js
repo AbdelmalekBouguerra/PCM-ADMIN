@@ -20,6 +20,12 @@ var table = [];
  * @return JSON Object the employeur table.
  */
 
+/**
+ * Obtenez la table PRESTATIONS_CMS de la base de données et transmettez-la à la fonction de rappel.
+ * 
+ * Args:
+ *   callback: la fonction à appeler lorsque la requête est terminée
+ */
 function getPCTable(callback) {
   db.execute("SELECT * FROM PRESTATIONS_CMS", (err, results) => {
     if (err) console.log(err);
@@ -27,6 +33,14 @@ function getPCTable(callback) {
   });
 }
 
+/**
+ * Il prend un tableau d'objets, chaque objet contenant l'ID d'une ligne dans la base de données, et
+ * supprime chaque ligne
+ * 
+ * Args:
+ *   selectedData: Les données qui ont été sélectionnées dans le tableau.
+ *   callback: C'est la fonction qui sera appelée après la suppression des données.
+ */
 function deleteRows(selectedData, callback) {
   console.log(
     "🚀 ~ file: emp_table.js ~ line 31 ~ deleteRows ~ selectedData",
@@ -46,6 +60,14 @@ function deleteRows(selectedData, callback) {
   callback();
 }
 
+/**
+ * Il prend une table comme paramètre, puis il parcourt chaque élément de la table et met à jour la
+ * base de données
+ * 
+ * Args:
+ *   table: l'objet table qui est envoyé depuis le frontend.
+ *   callback: La fonction de rappel qui sera appelée lorsque la requête sera terminée.
+ */
 function setPCTable(table, callback) {
   if (table !== null) {
     // first we organize our object.
