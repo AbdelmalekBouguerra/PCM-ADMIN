@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const hbs = require('hbs');
 const session = require('cookie-session');
 const path = require('path');
+const cors = require('cors');
 
 // env config
 dotenv.config();
@@ -22,6 +23,8 @@ httpsServer.listen(port,()=>{
     console.log(`Server started : https://localhost:${port}`);
 })
 
+
+app.use(cors());
 // Parse URL encoded bodies sent by forms
 app.use(express.urlencoded({ extended:false}))
 // Parse JSON bodies as sent by API clients
