@@ -102,7 +102,7 @@ table.on("rowSelected", function (row) {
 document.getElementById("add-row").addEventListener("click", function () {
   var rowCount = table.getDataCount();
   // we add +'' to make the ID a string cuz our controller test if string it update else insert
-  table.addRow({ID : rowCount+1+''});
+  table.addRow({ID : rowCount+2+''});
   table.scrollToRow(rowCount+1, "middle",true);
   table.redraw();
 });
