@@ -23,9 +23,6 @@ class ResponsiveLayout extends Module{
 
 	//generate responsive columns list
 	initialize(){
-		var self = this,
-		columns = [];
-
 		if(this.table.options.responsiveLayout){
 			this.subscribe("column-layout", this.initializeColumn.bind(this));
 			this.subscribe("column-show", this.updateColumnVisibility.bind(this));
@@ -36,8 +33,9 @@ class ResponsiveLayout extends Module{
 			this.subscribe("column-delete", this.initializeResponsivity.bind(this));
 
 			this.subscribe("table-redrawing", this.tableRedraw.bind(this));
-
+			
 			if(this.table.options.responsiveLayout === "collapse"){
+				this.subscribe("row-data-changed", this.generateCollapsedRowContent.bind(this));
 				this.subscribe("row-init", this.initializeRow.bind(this));
 				this.subscribe("row-layout", this.layoutRow.bind(this));
 			}

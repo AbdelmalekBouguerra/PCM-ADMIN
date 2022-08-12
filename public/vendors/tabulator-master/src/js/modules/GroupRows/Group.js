@@ -178,7 +178,7 @@ class Group{
 	
 	getRowIndex(row){}
 	
-	//update row data to match grouping contraints
+	//update row data to match grouping constraints
 	conformRowData(data){
 		if(this.field){
 			data[this.field] = this.key;
@@ -358,7 +358,7 @@ class Group{
 	hide(){
 		this.visible = false;
 		
-		if(this.groupManager.table.rowManager.getRenderMode() == "classic" && !this.groupManager.table.options.pagination){
+		if(this.groupManager.table.rowManager.getRenderMode() == "basic" && !this.groupManager.table.options.pagination){
 			
 			this.element.classList.remove("tabulator-group-visible");
 			
@@ -381,7 +381,7 @@ class Group{
 			
 			this.groupManager.table.rowManager.setDisplayRows(this.groupManager.updateGroupRows(), this.groupManager.getDisplayIndex());
 			
-			this.groupManager.table.rowManager.checkClassicModeGroupHeaderWidth();
+			this.groupManager.checkBasicModeGroupHeaderWidth();
 			
 		}else{
 			this.groupManager.updateGroupRows(true);
@@ -393,7 +393,7 @@ class Group{
 	show(){
 		this.visible = true;
 		
-		if(this.groupManager.table.rowManager.getRenderMode() == "classic" && !this.groupManager.table.options.pagination){
+		if(this.groupManager.table.rowManager.getRenderMode() == "basic" && !this.groupManager.table.options.pagination){
 			
 			this.element.classList.add("tabulator-group-visible");
 			
@@ -422,7 +422,7 @@ class Group{
 			
 			this.groupManager.table.rowManager.setDisplayRows(this.groupManager.updateGroupRows(), this.groupManager.getDisplayIndex());
 			
-			this.groupManager.table.rowManager.checkClassicModeGroupHeaderWidth();
+			this.groupManager.checkBasicModeGroupHeaderWidth();
 		}else{
 			this.groupManager.updateGroupRows(true);
 		}
@@ -474,11 +474,11 @@ class Group{
 		return output;
 	}
 	
-	getRows(compoment){
+	getRows(component){
 		var output = [];
 		
 		this.rows.forEach(function(row){
-			output.push(compoment ? row.getComponent() : row);
+			output.push(component ? row.getComponent() : row);
 		});
 		
 		return output;

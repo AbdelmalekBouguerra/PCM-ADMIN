@@ -3,17 +3,13 @@ const db = require("../env/db");
 
 // retrive the username
 function getUser(username, callback) {
-  db.execute(
-    "SELECT * FROM DEMANDEUR WHERE USERNAME = ?",
-    [username],
-    (err, results) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      callback(results);
+  db.execute("SELECT * FROM user WHERE son = ?", [username], (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
     }
-  );
+    callback(results);
+  });
 }
 
 // connect to LDAP server
@@ -52,9 +48,9 @@ exports.login = (req, res) => {
     getUser(username, (user) => {
       req.session.adminUser = user[0]; // save user information in session value
       req.session.adminUsername = username;
-      var Fl = user[0].PRENOM.charAt(0).toUpperCase();
-      var Ln = user[0].NOM.charAt(0).toUpperCase() + user[0].NOM.slice(1);
-      res.render("dashboard", { user: user[0], FirstLetter: Fl, LastName: Ln });
+      // var Fl = user[0].PRENOM.charAt(0).toUpperCase();
+      // var Ln = user[0].NOM.charAt(0).toUpperCase() + user[0].NOM.slice(1);
+      res.render("dashboard", { user: user[0] });
     });
   }
   // authLDAP(username,password,res);

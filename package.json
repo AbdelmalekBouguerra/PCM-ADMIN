@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "kill-port 3030;nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,10 @@
     "hbs": "^4.2.0",
     "ldapjs": "^2.3.2",
     "mysql2": "^2.3.3",
-    "open-file-explorer": "^1.0.2",
     "serve-index": "^1.9.1"
   },
   "devDependencies": {
     "kill-port": "^1.6.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.19"
   }
 }

@@ -1,62 +1,57 @@
-const express = require('express');
-const https = require('https');
-const fs = require('fs');
-const dotenv = require('dotenv');
-const hbs = require('hbs');
-const session = require('cookie-session');
-const path = require('path');
-const cors = require('cors');
+const express = require("express");
+const dotenv = require("dotenv");
+const hbs = require("hbs");
+const session = require("cookie-session");
+const path = require("path");
+const cors = require("cors");
 
 // env config
 dotenv.config();
-
+const config = process.env;
 // server config
 const app = express();
-// cert and key for https server
-const key = fs.readFileSync(process.env.CERT_KEY);
-const cert = fs.readFileSync(process.env.CERT);
+const port = config.PORT;
 
-var httpsServer = https.createServer({key: key, cert: cert}, app);
-const port = process.env.PORT;
-
-httpsServer.listen(port,()=>{
-    console.log(`Server started : https://localhost:${port}`);
-})
-
+app.listen(port, () => {
+  console.log(`Server started : http://localhost:${port}`);
+});
 
 app.use(cors());
 // Parse URL encoded bodies sent by forms
-app.use(express.urlencoded({ extended:false}))
+app.use(express.urlencoded({ extended: false }));
 // Parse JSON bodies as sent by API clients
-app.use(express.json())
+app.use(express.json());
 
 // Session config
-app.use(session({
-    name:'session',
-    secret:'key1',
-    key: ['key1','key2'],
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+app.use(
+  session({
+    secret: config.SESSION_SECRET,
+    maxAge: 2 * 60 * 60 * 1000, // 2 hours
+  })
+);
 
-}))
 var auth = false;
 
-auth = require('./routes/index');
+auth = require("./routes/index");
 // define public directory
-const publicDirectory = path.join(__dirname,'./public')
-app.use(express.static(publicDirectory))
-var serveIndex = require('serve-index');
+const publicDirectory = path.join(__dirname, "./public");
+app.use(express.static(publicDirectory));
+var serveIndex = require("serve-index");
 
 if (auth) {
-    app.use('/dpcFiles', serveIndex(path.join(__dirname,'./res/DpcDocs'),{'icons': true}));
+  app.use(
+    "/dpcFiles",
+    serveIndex(path.join(__dirname, "./res/DpcDocs"), { icons: true })
+  );
 }
 
 // Define view engine
-app.set('view engine', 'hbs');
+app.set("view engine", "hbs");
 
 // template hbs
-hbs.registerPartials(path.join(__dirname, 'views', 'templates'))
+hbs.registerPartials(path.join(__dirname, "views", "templates"));
 
 // Routers
-const indexRouter = require('./routes/index');
+const indexRouter = require("./routes/index");
 
-app.use('/',indexRouter);
+app.use("/", indexRouter);

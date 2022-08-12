@@ -16,8 +16,8 @@ const router = express.Router();
 
 /* Variable globale utilisée pour stocker le prénom et le nom de l'utilisateur. */
 var user;
-var Fl;
-var Ln;
+// var Fl;
+// var Ln;
 
 /* Il s'agit de la route de la page de connexion. */
 router.get("/", (req, res) => {
@@ -31,9 +31,9 @@ router
   .get((req, res) => {
     if (req.session.isAdminAuth) {
       user = req.session.adminUser;
-      Fl = user.PRENOM.charAt(0).toUpperCase();
-      Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-      res.render("dashboard", { user: user, FirstName: Fl, LastName: Ln });
+      // Fl = user.PRENOM.charAt(0).toUpperCase();
+      // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+      res.render("dashboard", { user: user });
     } else {
       res.render("login", {
         invalid: "You need to be authenticated to access this page",
@@ -43,12 +43,9 @@ router
 // Sh table routes==========================================
 router.get("/shtab", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("sh", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("sh");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/sh").get(emp_table.get).post(emp_table.post);
@@ -59,12 +56,9 @@ router.post("/deleteSH", emp_table.delete);
 // MEDECINS_CONVENTIONNES table routes====================
 router.get("/Medecins_conventionnes", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("MC", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("MC");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/MC").get(mc_table.get).post(mc_table.post);
@@ -75,12 +69,9 @@ router.post("/deleteMC", mc_table.delete);
 // PRESTATIONS_CMS =======================================
 router.get("/Prestations_cms", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("PC", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("PC");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/PC").get(pc_table.get).post(pc_table.post);
@@ -91,12 +82,9 @@ router.post("/deletePC", pc_table.delete);
 // Liste des structures Médecine du travail =================
 router.get("/Structures_Medecine_du_travail", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("smt", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("smt");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/SMT").get(smt_table.get).post(smt_table.post);
@@ -107,12 +95,9 @@ router.post("/deleteSMT", smt_table.delete);
 // Liste des structures Tiers payant ========================
 router.get("/Structures_Tiers_payant", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("stp", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("stp");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/STP").get(stp_table.get).post(stp_table.post);
@@ -123,12 +108,9 @@ router.post("/deleteSTP", stp_table.delete);
 // Liste des acts ==========================================
 router.get("/Acts", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
-  res.render("act", {
-    FirstName: Fl,
-    LastName: Ln,
-  });
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  res.render("act");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
 router.route("/ACT").get(act_table.get).post(act_table.post);
@@ -139,8 +121,8 @@ router.post("/deleteACT", act_table.delete);
 // Liste des Demande prise en charge =======================
 router.get("/DPC", (req, res) => {
   user = req.session.adminUser;
-  Fl = user.PRENOM.charAt(0).toUpperCase();
-  Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
+  // Fl = user.PRENOM.charAt(0).toUpperCase();
+  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("DPC");
 });
 /* obtenir toutes les demandes */
