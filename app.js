@@ -4,6 +4,7 @@ const hbs = require("hbs");
 const session = require("cookie-session");
 const path = require("path");
 const cors = require("cors");
+const db = require("./config/sequelize");
 
 // env config
 dotenv.config();
@@ -53,5 +54,10 @@ hbs.registerPartials(path.join(__dirname, "views", "templates"));
 
 // Routers
 const indexRouter = require("./routes/index");
+
+/* Connexion à la base de données MySQL. */
+db.authenticate()
+  .then(() => console.log("Database connection established ..."))
+  .catch((err) => console.log("Error connecting to Database : " + err));
 
 app.use("/", indexRouter);

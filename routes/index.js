@@ -126,15 +126,15 @@ router.get("/DPC", (req, res) => {
   res.render("DPC");
 });
 /* obtenir toutes les demandes */
-router.get("/DPCAlltable", dpc.getAll);
-/* obtenir toutes les demandes rejetées. */
-router.get("/DPCRejectedtable", dpc.getRejected);
-/* obtenir les demandes non encore traitées par l'administrateur */
+// router.get("/DPCAlltable", dpc.getAll);
+// /* obtenir toutes les demandes rejetées. */
+// router.get("/DPCRejectedtable", dpc.getRejected);
+// /* obtenir les demandes non encore traitées par l'administrateur */
 router.route("/DPCtable").get(dpc.get);
-/* traiter la demande de confirmation */
-router.route("/DPC/confirm").post(dpc.confirm);
-/* traiter la demande de rejet */
-router.route("/DPC/rejet").post(dpc.reject);
+// /* traiter la demande de confirmation */
+// router.route("/DPC/confirm").post(dpc.confirm);
+// /* traiter la demande de rejet */
+// router.route("/DPC/rejet").post(dpc.reject);
 // ---------------------------------------------------------
 
 module.exports = router;
