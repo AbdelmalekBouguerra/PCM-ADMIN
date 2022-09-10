@@ -1,6 +1,10 @@
 const ldap = require("ldapjs");
 const db = require("../env/db");
 
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/sequelize");
+const sys_fc = require("../models/sys_flux_confirmation")(sequelize, DataTypes);
+
 // retrive the username
 function getUser(username, callback) {
   db.execute("SELECT * FROM user WHERE son = ?", [username], (err, results) => {
@@ -45,7 +49,14 @@ exports.login = (req, res) => {
     });
   } else {
     req.session.isAdminAuth = true; // bool value to check if user logged in
-    getUser(username, (user) => {
+    getUser(username, async (user) => {
+      // get the level of confirmation
+      const level = await sys_fc.findOne({
+        where: { role: user[0].role },
+        attributes: ["niveau"],
+      });
+      console.log(level);
+      req.session.adminLevel = level.niveau;
       req.session.adminUser = user[0]; // save user information in session value
       req.session.adminUsername = username;
       // var Fl = user[0].PRENOM.charAt(0).toUpperCase();

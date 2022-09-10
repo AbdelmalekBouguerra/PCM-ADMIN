@@ -14,10 +14,10 @@ var success = function (cell, formatterParams) {
   //plain text value
   return `
     <button type="button" class="btn btn-inverse-success btn-icon" 
-    data-id="${cell.getRow().getData().ID}" onclick="confirmation(this)">
+    data-id="${cell.getRow().getData().dpc_id}" onclick="confirmation(this)">
     <i class="mdi mdi mdi-check" style="margin-right: 0px;"></i></button>
     <button type="button" class="btn btn-inverse-danger btn-icon"
-    data-id="${cell.getRow().getData().ID}" onclick="rejectionModel(this)"
+    data-id="${cell.getRow().getData().dpc_id}" onclick="rejectionModel(this)"
      style="margin-left: 10px;">
     <i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>
   `;
@@ -28,13 +28,13 @@ var table = new Tabulator("#DPC-table", {
   ajaxURL: "http://localhost:3050/DPCtable", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
   layout: "fitColumns",
-  progressiveLoad: "scroll",
+  // progressiveLoad: "scroll",
   autoColumns: false, //create columns from data field names
   history: true,
   placeholder: "No Data Set",
   index: "id_dpc",
-  columnDefaults: {
-    tooltip: function (e, cell, onRendered) {
+  // columnDefaults: {
+  /* tooltip: function (e, cell, onRendered) {
       //e - mouseover event
       //cell - cell component
       //onRendered - onRendered callback registration function
@@ -44,8 +44,8 @@ var table = new Tabulator("#DPC-table", {
       el.innerText = cell.getColumn().getField() + " - " + cell.getValue(); //return cells "field - value";
 
       return el;
-    },
-  },
+    },*/
+  // },
   columns: [
     { title: "Id", field: "dpc_id", width: 48, sorter: "number" },
     {
@@ -55,40 +55,41 @@ var table = new Tabulator("#DPC-table", {
       sorter: "string",
     },
     {
-      title: "Lien de parente du Ben",
-      field: "LIEN_PARENTE_BEN",
-      width: 157,
-      sorter: "string",
-    },
-    {
       title: "Structure",
-      field: "STRUCTURE",
+      field: "employeur",
       width: 146,
       sorter: "string",
     },
     {
       title: "Act",
-      field: "ACT",
+      field: "id_act",
       width: 146,
       sorter: "string",
     },
     {
-      title: "Agent",
-      field: "VALIDATION_AGENT",
+      title: "Agent d'accueil",
+      field: "agent_1_confirmation",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
     },
     {
-      title: "Chef Region",
-      field: "VALIDATION_CHEFREGION",
+      title: "Responsable 1",
+      field: "agent_2_confirmation",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
     },
     {
-      title: "Directeur",
-      field: "VALIDATION_DIRECTEUR",
+      title: "Responsable 2",
+      field: "agent_3_confirmation",
+      hozAlign: "center",
+      width: 77,
+      formatter: "tickCross",
+    },
+    {
+      title: "Chef region",
+      field: "agent_4_confirmation",
       hozAlign: "center",
       width: 77,
       formatter: "tickCross",
@@ -100,7 +101,8 @@ var table = new Tabulator("#DPC-table", {
       hozAlign: "center",
       cellClick: function (e, cell) {
         window.open(
-          "https://localhost:3031/demande/" + cell.getRow().getData().NUM_DPC,
+          "http://localhost:3031/dpcFiles/" +
+            cell.getRow().getData().dpc_number,
           "_blank"
         );
       },

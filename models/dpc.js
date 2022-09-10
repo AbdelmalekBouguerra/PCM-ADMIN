@@ -19,12 +19,32 @@ module.exports = function(sequelize, DataTypes) {
         key: 'user_id'
       }
     },
+    beneficiare_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     id_act: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
     type_demande: {
       type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    agent_1_confirmation: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    agent_2_confirmation: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    agent_3_confirmation: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    agent_4_confirmation: {
+      type: DataTypes.TINYINT,
       allowNull: true
     },
     date_creation: {

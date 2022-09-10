@@ -131,8 +131,8 @@ router.get("/DPC", (req, res) => {
 // router.get("/DPCRejectedtable", dpc.getRejected);
 // /* obtenir les demandes non encore traitées par l'administrateur */
 router.route("/DPCtable").get(dpc.get);
-// /* traiter la demande de confirmation */
-// router.route("/DPC/confirm").post(dpc.confirm);
+/* traiter la demande de confirmation */
+router.route("/DPC/confirm").post(dpc.confirm);
 // /* traiter la demande de rejet */
 // router.route("/DPC/rejet").post(dpc.reject);
 // ---------------------------------------------------------
