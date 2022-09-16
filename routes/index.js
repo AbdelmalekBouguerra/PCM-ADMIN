@@ -11,6 +11,8 @@ const smt_table = require("../controllers/smt_table");
 const stp_table = require("../controllers/stp_table");
 const act_table = require("../controllers/act_table");
 
+const createPDF = require("../controllers/createDPC");
+
 /* Création d'un nouvel objet routeur. */
 const router = express.Router();
 
@@ -133,8 +135,10 @@ router.get("/DPC", (req, res) => {
 router.route("/DPCtable").get(dpc.get);
 /* traiter la demande de confirmation */
 router.route("/DPC/confirm").post(dpc.confirm);
+
 // /* traiter la demande de rejet */
 // router.route("/DPC/rejet").post(dpc.reject);
 // ---------------------------------------------------------
 
+router.get("/createDPC/:id", createPDF);
 module.exports = router;

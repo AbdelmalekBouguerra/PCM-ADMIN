@@ -22,6 +22,17 @@ var success = function (cell, formatterParams) {
     <i class="mdi mdi mdi-close" style="margin-right: 0px;"></i></button>
   `;
 };
+
+var dpcFile = (cell, formatterParams) => {
+  console.log("chef :", cell.getRow().getData().agent_4_confirmation);
+  if (cell.getRow().getData().agent_4_confirmation == 1) {
+    return `<button type="button" class="btn btn-inverse-success btn-icon">
+    <i class="mdi mdi mdi-file-check" style="margin-right: 0px;"></i></button>`;
+  } else {
+    return `<button type="button" class="btn btn-inverse-danger btn-icon">
+    <i class="mdi mdi mdi-file-check" style="margin-right: 0px;" disabled></i></button>`;
+  }
+};
 // initialize table
 var table = new Tabulator("#DPC-table", {
   height: "500px",
@@ -110,6 +121,12 @@ var table = new Tabulator("#DPC-table", {
     {
       formatter: success,
       title: "Action",
+      width: 138,
+      hozAlign: "center",
+    },
+    {
+      formatter: dpcFile,
+      title: "DPC",
       width: 138,
       hozAlign: "center",
     },

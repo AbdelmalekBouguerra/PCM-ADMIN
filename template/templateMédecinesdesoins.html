@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        body {
+            margin: 10px 20px;
+        }
+
+
+        .logo {
+            width: 100px;
+            height: 100px;
+        }
+
+        .headingSubtitle {
+            margin: 2px;
+            font-family: "Times New Roman", Georgia, serif;
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .calibri {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 14px;
+        }
+
+        .inline {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cadre {
+            margin: auto;
+            border-color: black;
+            border-style: double solid solid solid;
+            width: fit-content;
+            height: fit-content;
+        }
+
+        .cadre p {
+            margin: 20px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .text {
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: 18px;
+            padding-left: 10px;
+        }
+
+        .footerSmall {
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: 14px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: max-content max-content;
+
+        }
+
+        .inter-10 {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .inter-div p {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <img class="logo"
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIYAAAB5CAMAAADLY6lvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAP///zo6Ma2lrXNzc8XFvVJSUlpjY97e3qWlnBkhGUpCOsXO3oSEjAgICIyl7++tvZxaY87mEITmEM6tEIStEL29tXuEhCkpKa21tYSla4SclBkQEO+t7xkQOs7mlM7mQoTmQs6tQoStQs6tlM7ma86ta1Lma5x7Y1LmKRnmaxnmKVK1a1K1KRm1axm1Ke/mEKXmEO+tEKWtEFK971Jj71K9rVJjrYzvvRm97xlj7xm9rRljrVLmSlLmCBnmShnmCFK1SlK1CBm1Shm1CFK9zlJjzlK9jFJjjIzOvRm9zhljzhm9jBljjKVr7+/m76U63qXelKU6nCmMWqVrxaUQ3qXea6UQnCljWs573s57WoQxWs4x3s4xWs57nM57GYQxGc4xnM4xGe9a3u9aWqUQWu8Q3u8QWu9anO9aGaUQGe8QnO8QGQiMWghjWr3vve/eve/3773v5lKEa72l76V7IaWla3tjlFKESr2lznulvVLv7+/mlO/mQlKU76XmQlKMKVLvrVKUrVI6te+tQqWtQozv7++tlBnv7xmU7xnvrRmUrRmMKRk6tSkxMe/ma++ta1JjKVIQtRljKRkQtVLvzlKUzlKMCFLvjFKUjFI6lIzO7xnvzhmUzhnvjBmUjBmMCBk6lFJjCFIQlBljCBkQlEI65kI6awg6awg65kIZOkIQ5kIQawgQawgQ5u973u97WqUxWu8x3u8xWu97nO97GaUxGe8xnO8xGRA6OoRaEKV7lKValJyUlJylvWM65mM6ayk6ayk65mMZOmMQ5mMQaykQaykQ5ntaY1o6EBk6EFoQEIRaMYR774Q674TvlIQ6rYR7xYQQ74Tva4QQrc5a785aa4QQa84Q784Qa85arc5aKYQQKc4Qrc4QKYR7EKVaEDo6EDoQEIRa74Q6zoTOlIQ6jIRaxYQQzoTOa4QQjM5azs5aSoQQSs4Qzs4QSs5ajM5aCIQQCM4QjM4QCIR7MaVaMe/3xXt7WsWltQApEOb3/zpCQgAAEP/3/wAAADHnswYAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAABXWAAAV1gHWa1n9AAAIzElEQVR4Xu1bW5LjqBKVectl/IlQWNFbYi21EW9jImYP3O9eUlUYd8zJBPnR46p2z0xd+cOnVLZASXJIEiRkslvdREpOa51w4lzLOgPZN3GR//qRzAe4QcOFrJQpIgp/cEMx+YpIGq2Vtypxg7W6nmpvVTjU8/vwNxopmzJ13TFGIXIKoutEaJcYyW670qq7goxdp+pphoKbMh/iZxrBQtvaDLt+HLVbSaJxpdCZrnu5VQXV7dupmKL9e2d+gmsar5IsUbKbrc7WGOnMhcCKiUZp9kkuyFGGKp3P1kij8k1F0nKsBRmpKZ6/Z1zTCKXruumiISN0l3ecJC+EonyiUe1z0N6IPfrOeErn9YmG233fkWySyr7sY7G5mu81KEue5jJ8h697X1t0TYP6oOuiHdDEH5TxDl5sjWSbEVw7SS4bWC5GfEzkmz1OGo332MUeop7UTVtIGUn5DiXI08JL11nYg2yt2C7XNFxWRsAA2yispPaM++aibIT5pGiyxLrbFiV7X7bdtLui0a+7mKt9os0DkWFLzl1MWt9QPXv1K5VoNLRXdRSmTYAlC65PSh/OvjEbgWlE69kSKlAZMiHahrpPNGI39aukUD0GzA/6NkSDbBuJRi1RaVxYw0FSwIwNTmdzZB85+cbJJeiko46AJUj1arVBDpRS2wfOYGtAGzltHOTu5QgBti01CtpIK9EA3WsapNug9SewCnn2DbIGqa6iIOE1WxPQkDGaO4V0w6J+OsIaMAeUTHHChTqN0Agga7yTNcCLvfqCRlLUPuOz7CV6O3s2Oooyf+oL6p2jlVp7qKb+wXTvXHIbLe0aHYhO+QZRHzZuJGeI/8NQgqvZIoohNt65DdMaNo5qK8EFalGdambfUAIO3U3rCEzbLRJbAS+j2gv4p4Eq7yKrpBP1ZhnwaMiS12wMTiZhjEAlR5iH8INuTQETLwaLrWWjMfBQULaYo7ZtCmo0VmiDgYYixF7gsxjryf8ccr1bpV50R9SAGw0ZmRgzttMUQY0nAUzAJU5r+otGVRYMhw7G0ENJqIWKKe7xTek9SlZHmGmQCcE8hDHoMQQ9z6MwfXK9FceuSPRAGPvcZ6+qKaxHKvCdmGV1XzHOOcAm4/YQTR/GjC5FHWPfv2u9IdlwkjvT+BDaThg2hSegBnKM5H6ekW8g9TyyYdDPcQ8NM8WiLhr4G6DJ91jyL8veQeMQfP/PSNC90pjhjsInGok67RLwAfo4gzMqci8pdZVzkaigDIknKN/SN5FrCyuNFDxuJtO3iY91PdZr/CNj/S1yigZJvRDpiDiQd5aGOEvjmKXwQRNAzaDjLM+iJMTzK9Nwnh4zAMy6OC5wnfoMd0neEuKZAzTSiJvlcmg0XiXu/gui0eAnrgXRaNCj7JJoNHxLLgV+iulWu9ONahk8iDX4gQi+0ZJL4ekbl5itsTQNjYXZ0zcamm8s3im0GnsE32Aaj+IbC1tjnjdacim0TvncGtGqLwa/aPyVb4g8yq9BwHLrNa0Srx5/OW9E8TUoxfbnNxlLuujFWnDZkTLN60r4xqIDNnrm8Uvf+GrQSyiisfDzxpbfES7rG4SXOpk/nzcYj/K88SjPok/fOOOx1inLTuYn36AfAJZEezJPWbSMZdB8Y5UkvVBeDM032k+I/OPLEmi+wXBjn73fefpF5wsO/kXqAzRraAhW5CEP4PIFn5/1evUN+n1ru8VBH/z1BZ+txpuo1qg/4S2I6hv0k+KiqPPG4taovrG8NeiZ+OkbDQ8yUh7FN57zxgWe88Ylnr5xiUexxuYRrCH4tdPC1phM3efVpb60V4R34r97dI7F7ty8qSaFoMf7/8a61ekjCKv8fX9DlueNHe3JfLWiLYD3/H++ypvqzq/fRpekH+4HWvH52srI8Huoe5m6/3gJu420XevOg/7eePdRR/vclgRPoqvu/VOP+3o0Gg9iDdo0uSQajbpvdzk0GoG3Ky6Hx7LG0zcYT9+4xNM3LvH0jUs8feMSj+Ub2sYoljui4nic7qCDlOP//ahf4/heFwmnBcI/RpIcp/Q7cLn/aR3x72lszDq303sh99Ujzvj3NNxLvAxPuAdjvEXDyezlnL+ROe/yHIqmR5e09Hkn22KTtuf3SOeQEgVUuODFpFA66eA05MjaKJJ3Hkoos5bahExaqicEUXSiDD9fBo1gi7HG0tsOilY0FPFhLK/3nRKKgkC+Q6TuO0nSGmORZ5QqdrPSysZtUeNKkxb7vXcUvQaR7wpKvDGkNgVKvOHDWAigU6JSRlmSe2+RXElNVjvpab9PsAJyjkKoBEW6OIulf6aokixiRgG3eyloAjK8QfVkhL5Mg3a0tBVepwSipaiwgUhv9xzv9CrLi5LIoVLEK4hjVD2pVXt+2dNozF1gpzmSBKcDTG7qOyHAs1SOc5r2p3PsoyvsG9rUaKhDEGIeB1BC19AHp5hR9PKBQtBalQk10jc6RVsKFyQ5ObWQI2AUqNAxmZYWSJtaitGkneEIL20oeAsYjjU4ixD2oJEGirC6xCj2s1ejdXSNXFRn9CuZoeUxQolc7TwYA3m3rlVWyOrvLU+XFqJpt2emmiyV7HbX0g2tJMFvmWIdsCmYNZLc4oofPbXV2dOcQN5NHXhqGBrJyjbVDPqPulloldeGXqoxZASNV39hZA4hZl0VeTsHhnAYMnd9UtFw/ODK9eXP/kDWmFtfx/pYoq+VuF2styX4BtWPhtNbZ7bOW93e5uAD5BvImSO7dB5Iy6U13ki2Wzlvs8yGN2A5Dy/PUlIvkZ/Bg2Z7vhdyzkMwL2bALSFTZNiVb1Q2lIHCqh9lVkWs67XvyIFa6W2hieE9nsyTj803XLb2zXKcKvWO4nnD8vhdpd0pQG2j6iCiIFGSV72sOc6zTPsCUuoxr2DeQPOGmsk5mDhAj/ZR6+EU2jVaHlbkG0mfJjskKLrNncPa2gnqOedpjipPrsbMujrBppMKFgkak8khzZNvLdRUHFoRoFVQXXRxPASN1eovIRpoj6C8fDkAAAAASUVORK5CYII="
+        alt="logo">
+    <p class="headingSubtitle">Direction Générale</p>
+    <div class="inline">
+        <p class="headingSubtitle">Direction Affaires Sociales</p>
+        <p class="headingSubtitle">{{ willayCreation }},Le {{ dateCreation }}</p>
+    </div>
+    <p class="headingSubtitle">Région Boumerdes</p>
+    <br>
+    <p class="calibri"><strong> N° </strong> : {{ seq }} / SANTE</p>
+    <div class="cadre">
+        <p>CONTRAT SH/DIRECTION AFFAIRES SOCIALES/REGION BOUMERDES</p>
+        <p>PRISE EN CHARGE MEDICALE : CABINET SPECIALITE</p>
+        <p>Structure médicale conventionnée : {{ structureMedicale }}</p>
+        <p>SPECIALISTE EN : {{ strucutreSpecialite }}</p>
+    </div>
+    <div class="grid inter-div">
+        <p class="text">Statut de l’Adhérent :</p>
+        <p class="text"> {{ adhStatu }} </p>
+
+        <p class="text">Nom & Prénom de l’Adhérent :</p>
+        <p class="text">{{ adhNom }} {{ adhPrenom }}</p>
+
+        <p class="text">Fonction :</p>
+        <p class="text">{{ adhFonction }}</p>
+    </div>
+    <div class="inline">
+        <div class="inline inter-div">
+            <p class="text">Affectation :</p>
+            <p class="text">{{ adhAffection }}</p>
+        </div>
+        <div class="inline inter-div">
+            <p class="text">Matricule : </p>
+            <p class="text"> {{ adhMatricule }} </p>
+        </div>
+    </div>
+    <p class="text bold">Cette prise en charge est établie :</p>
+    <div class="grid inter-div">
+        <p class="text">Statut du Bénéficiaire :</p>
+        <p class="text">{{ beneficiaire }}</p>
+
+        <p class="text">Nom & Prénom du bénéficiaire de la prestation :</p>
+        <p class="text">{{ beneficiaireNom }} {{ beneficiairePrenom }}</p>
+
+        <p class="text">Désignation de la prestation :</p>
+        <p class="text">{{ designation }}</p>
+    </div>
+    <p class="text ">Fiat à {{ willayCreation }} le : {{ dateCreation }}</p>
+    <p class="text bold">LE CHEF DE REGION DE BOUMERDES </p>
+    <br>
+    <br>
+    <p class="text bold">S .AIT KACI </p>
+    <p class="footerSmall">Nb: - La présente prise en charge est valable pour une durée de (03) mois à
+        compter de la date de son établissement,
+    </p>
+    <p class="text bold center"> Adresse du centre d’imagerie, Clinique ou Cabinet :</p>
+    <p class="text center inter-10 "> {{ structureAddresse }} </p>
+    <hr class="solid">
+    <p class="text center inter-10">SONATRACH/DAS : Villa ATCO – {{ willayCreation }} TEL : 024.79.03.61</p>
+
+</body>
+
+</html>
