@@ -2,7 +2,7 @@
 const express = require("express");
 
 /* Importation des modules depuis le dossier controllers. */
-const emp_table = require("../controllers/emp_table");
+const sh_table = require("../controllers/sh_table");
 const auth = require("../controllers/auth");
 const dpc = require("../controllers/dpc_table");
 const mc_table = require("../controllers/mc_table");
@@ -50,9 +50,9 @@ router.get("/shtab", (req, res) => {
   res.render("sh");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
-router.route("/sh").get(emp_table.get).post(emp_table.post);
+router.route("/sh").get(sh_table.get).post(sh_table.post);
 /* supprimer les lignes sélectionnées */
-router.post("/deleteSH", emp_table.delete);
+router.post("/deleteSH", sh_table.delete);
 // ---------------------------------------------------------
 
 // MEDECINS_CONVENTIONNES table routes====================

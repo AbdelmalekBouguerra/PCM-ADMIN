@@ -27,6 +27,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    structure_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     type_demande: {
       type: DataTypes.STRING(50),
       allowNull: true

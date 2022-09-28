@@ -1,4 +1,9 @@
 let idRejctionDemande;
+const URL = "http://localhost:3050";
+// unable tooltip
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
 
 //Generate doc icon
 var docIcon = function (cell, formatterParams) {
@@ -26,17 +31,20 @@ var success = function (cell, formatterParams) {
 var dpcFile = (cell, formatterParams) => {
   console.log("chef :", cell.getRow().getData().agent_4_confirmation);
   if (cell.getRow().getData().agent_4_confirmation == 1) {
-    return `<button type="button" class="btn btn-inverse-success btn-icon">
+    return `<button type="button" class="btn btn-inverse-success btn-icon"
+    data-id="${cell.getRow().getData().dpc_id}" onclick="createDPC(this)">
     <i class="mdi mdi mdi-file-check" style="margin-right: 0px;"></i></button>`;
   } else {
-    return `<button type="button" class="btn btn-inverse-danger btn-icon">
-    <i class="mdi mdi mdi-file-check" style="margin-right: 0px;" disabled></i></button>`;
+    return `<span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="You cant create untile role 4 confirmed">
+    <button type="button" class="btn btn-inverse-danger btn-icon">
+    <i class="mdi mdi mdi-file-check" style="margin-right: 0px;pointer-events: none;" type="button" disabled></i></button>
+    </span>`;
   }
 };
 // initialize table
 var table = new Tabulator("#DPC-table", {
   height: "500px",
-  ajaxURL: "http://localhost:3050/DPCtable", //ajax URL
+  ajaxURL: URL + "/DPCtable", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
   layout: "fitColumns",
   // progressiveLoad: "scroll",
@@ -64,6 +72,32 @@ var table = new Tabulator("#DPC-table", {
       field: "son",
       width: 116,
       sorter: "string",
+      tooltip: function (e, cell, onRendered) {
+        //e - mouseover event
+        //cell - cell component
+        //onRendered - onRendered callback registration function
+
+        var el = document.createElement("div");
+        el.style.backgroundColor = "darkgray";
+        el.style.fontSize = "14px";
+        el.innerHTML = `
+        <div style="display: grid;grid-template-columns: max-content max-content;	margin: 10px;">
+          <span>Nom : </span>
+          <span>${cell.getRow().getData().nom} </span>
+          <span>Prenom : </span>
+          <span>${cell.getRow().getData().prenom} </span>
+          <span>Role :  </span>
+          <span>${cell.getRow().getData().role} </span>
+          <span style="margin-right: 10px;">matricule : </span>
+          <span>${cell.getRow().getData().matricule} </span>
+          <span>Tele :  </span>
+          <span>${cell.getRow().getData().tele || "-"} </span>
+          <span>Email :  </span>
+          <span>${cell.getRow().getData().email || "-"} </span>
+        </div>
+        `;
+        return el;
+      },
     },
     {
       title: "Structure",
@@ -326,4 +360,20 @@ function rejection(ele) {
       },
     });
   } else return false;
+}
+
+function createDPC(ele) {
+  var id = ele.dataset.id;
+  // $.ajax({
+  //   url: "/createDPC/" + id,
+  //   type: "GET",
+  //   async: false,
+  //   success: function (response, textStatus, jqXHR) {},
+  //   error: function (jqXHR, textStatus, errorThrown) {
+  //     console.log(jqXHR);
+  //     console.log(textStatus);
+  //     console.log(errorThrown);
+  //   },
+  // });
+  window.open(URL + "/createDPC/" + id, "_blank");
 }

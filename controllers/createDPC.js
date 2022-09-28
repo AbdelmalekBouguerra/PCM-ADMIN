@@ -120,10 +120,58 @@ module.exports = async function (req, res, next) {
       thisAct = await medecins_conventionnes.findOne({
         where: { id: dpcResult.id_act },
       });
+      data = {
+        seq: `${dpcResult.dpc_number}/2022`, //todo this should be unique by document not by dpc
+        dateCreation: new Date().toLocaleDateString(), // todo chage this with col that containe the date of dpc file creatin
+        willayCreation: "Boumerdes", // todo add williay in admin table
+        structureMedicale: thisAct.medecin,
+        strucutreSpecialite: thisAct.specialite,
+        structureAddresse: thisAct.adresse,
+        designation: "DESIGNATION", //todo ask about where to get this data form
+        adhStatu: dpcResult.user.role, //todo replace this with status in user table
+        adhNom: dpcResult.user.nom,
+        adhPrenom: dpcResult.user.prenom,
+        adhFonction: "FONCTION", //todo add fonction to user table
+        adhAffection: "AFFECTION", //todo ask what is affection ??
+        adhMatricule: dpcResult.user.matricule,
+        beneficiaire: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.lien_parante
+          : "lui meme",
+        beneficiaireNom: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.nom
+          : "",
+        beneficiairePrenom: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.prenom
+          : "",
+      };
     } else if (dpcResult.type_demande === "Prises en charge 100 %") {
       thisAct = await medecin_travail_act.findOne({
         where: { medecin_travail_structure_id: dpcResult.id_act },
       });
+      data = {
+        seq: `${dpcResult.dpc_number}/2022`, //todo this should be unique by document not by dpc
+        dateCreation: new Date().toLocaleDateString(), // todo chage this with col that containe the date of dpc file creatin
+        willayCreation: "Boumerdes", // todo add williay in admin table
+        structureMedicale: thisAct.structure,
+        strucutreSpecialite: thisAct.acte,
+        structureAddresse: thisAct.adresse,
+        designation: "DESIGNATION", //todo ask about where to get this data form
+        adhStatu: dpcResult.user.role, //todo replace this with status in user table
+        adhNom: dpcResult.user.nom,
+        adhPrenom: dpcResult.user.prenom,
+        adhFonction: "FONCTION", //todo add fonction to user table
+        adhAffection: "AFFECTION", //todo ask what is affection ??
+        adhMatricule: dpcResult.user.matricule,
+        beneficiaire: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.lien_parante
+          : "lui meme",
+        beneficiaireNom: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.nom
+          : "",
+        beneficiairePrenom: dpcResult.beneficiaire
+          ? dpcResult.beneficiaire.prenom
+          : "",
+      };
     } else if (dpcResult.type_demande === "Randevou CMS") {
       res
         .status(406)
@@ -138,22 +186,6 @@ module.exports = async function (req, res, next) {
     );
     var template = handlebars.compile(templateHtml);
     var html = template(data);
-
-    // var pdfPath = path.join("pdf", `${data.name}.pdf`);
-
-    // var options = {
-    //    format: 'A4'
-    //   width: "1230px",
-    //   headerTemplate: "<p></p>",
-    //   footerTemplate: "<p></p>",
-    //   displayHeaderFooter: false,
-    //   margin: {
-    //     top: "10px",
-    //     bottom: "30px",
-    //   },
-    //   printBackground: true,
-    //   path: pdfPath,
-    // };
     var options = {
       format: "A4",
     };

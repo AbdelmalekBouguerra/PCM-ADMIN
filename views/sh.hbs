@@ -43,8 +43,8 @@
                   </p>
                   <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                     <select class="form-control" style="width: 200px;" id="filter-field">
-                      <option value="CODE" selected>Code Mnémonique</option>
-                      <option value="STRUCTURE">Structures</option>
+                      <option value="code_mnémonique" selected>Code Mnémonique</option>
+                      <option value="structure_libelle">Structures</option>
                     </select>
                     <input type="text" id="filter-value" class="form-control" placeholder="Search products">
                   </div>
@@ -53,12 +53,9 @@
                   <button type="button" class="btn btn-inverse-success btn-fw m-2" id="add-row">
                     <i class="mdi mdi-plus">Ajouter</i>
                   </button>
-                  <form method="post" action="/deleteSH" onsubmit='if (!confirm("êtes-vous sûr de vouloir supprimer ces lignes!")) {
-                    return false;
-                    }'>
-                    <input type="hidden" name="selectedRowsForDel" id="selectedRowsForDel" />
-                    <button id="del-row" type="submit" class="btn btn-inverse-danger btn-fw">Supprimer</button>
-                  </form>
+                  <button id="del-row" onclick="rowDelete();" class="btn btn-inverse-danger btn-fw">
+                    Supprimer
+                  </button>
                   <br>
                   <div id="btn"></div>
                 </div>
@@ -87,6 +84,9 @@
   <script src="/js/misc.js"></script>
   <script src="/js/settings.js"></script>
   <script src="/js/todolist.js"></script>
+  <script src="/vendors/notiflix/build/notiflix-report-aio.js"></script>
+  <script src="/vendors/notiflix/build/notiflix-confirm-aio.js"></script>
+
   <!-- endinject -->
   <!-- Custom js for this page -->
 

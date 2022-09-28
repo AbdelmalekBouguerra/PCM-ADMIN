@@ -12,5 +12,6 @@ module.exports = new Sequelize(
   {
     host: config.MYSQL_HOST,
     dialect: "mysql",
+    logging: false,
   }
 );
