@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       unique: "code_UNIQUE"
     },
+    tiers_payant_structure_id: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
     designation: {
       type: DataTypes.TEXT,
       allowNull: true

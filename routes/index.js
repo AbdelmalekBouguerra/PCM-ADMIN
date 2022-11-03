@@ -137,7 +137,7 @@ router.route("/DPCtable").get(dpc.get);
 router.route("/DPC/confirm").post(dpc.confirm);
 
 // /* traiter la demande de rejet */
-// router.route("/DPC/rejet").post(dpc.reject);
+router.route("/DPC/rejet").post(dpc.reject); //todo work on this API
 // ---------------------------------------------------------
 
 router.get("/createDPC/:id", createPDF);

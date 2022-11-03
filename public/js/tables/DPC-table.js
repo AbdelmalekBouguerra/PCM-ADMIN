@@ -1,5 +1,34 @@
 let idRejctionDemande;
 const URL = "http://localhost:3050";
+Notiflix.Report.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  success: {
+    svgColor: "#32c682",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#32c682",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(50,198,130,0.2)",
+  },
+  failure: {
+    svgColor: "#ff5549",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#ff5549",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(255,85,73,0.2)",
+  },
+});
+
+Notiflix.Confirm.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  messageColor: "#ffffff",
+  cancelButtonColor: "#f8f8f8",
+  cancelButtonBackground: "#d30000",
+});
+
 // unable tooltip
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
@@ -29,7 +58,6 @@ var success = function (cell, formatterParams) {
 };
 
 var dpcFile = (cell, formatterParams) => {
-  console.log("chef :", cell.getRow().getData().agent_4_confirmation);
   if (cell.getRow().getData().agent_4_confirmation == 1) {
     return `<button type="button" class="btn btn-inverse-success btn-icon"
     data-id="${cell.getRow().getData().dpc_id}" onclick="createDPC(this)">
@@ -101,15 +129,32 @@ var table = new Tabulator("#DPC-table", {
     },
     {
       title: "Structure",
-      field: "employeur",
+      field: "code_mnémonique",
       width: 146,
       sorter: "string",
+      tooltip: function (e, cell, onRendered) {
+        //e - mouseover event
+        //cell - cell component
+        //onRendered - onRendered callback registration function
+
+        var el = document.createElement("p");
+        el.style.backgroundColor = "darkgray";
+        el.style.fontSize = "14px";
+        el.innerText = `${cell.getRow().getData().structure_libelle}`;
+        return el;
+      },
     },
     {
       title: "Act",
       field: "id_act",
       width: 146,
       sorter: "string",
+    },
+    {
+      title: "Date demande",
+      field: "date_creation",
+      width: 146,
+      sorter: "date",
     },
     {
       title: "Agent d'accueil",
@@ -298,25 +343,41 @@ function confirmation(ele) {
   var id = { id: ele.dataset.id };
   console.log("id: " + JSON.stringify(id));
   // console.log("input : ", input.value);
-  if (confirm("êtes-vous sûr de vouloir accepte cette demande!")) {
-    $.ajax({
-      url: "/DPC/confirm", // Url of backend (can be python, php, etc..)
-      type: "POST", // data type (can be get, post, put, delete)
-      data: JSON.stringify(id),
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
-      success: function (response, textStatus, jqXHR) {
-        console.log(response);
-        table.setData();
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log(errorThrown);
-      },
-    });
-  } else return false;
+  Notiflix.Confirm.show(
+    "Demande PC",
+    "Etes-vous sûr de vouloir accepte cette demande!",
+    "Oui",
+    "Non",
+    () => {
+      $.ajax({
+        url: "/DPC/confirm", // Url of backend (can be python, php, etc..)
+        type: "POST", // data type (can be get, post, put, delete)
+        data: JSON.stringify(id),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+        success: function (response, textStatus, jqXHR) {
+          Notiflix.Report.success(
+            "La demande est bien confirmé",
+            "",
+            "d'accord"
+          );
+          table.setData();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          Notiflix.Report.failure(
+            "La demande n'est pas confirmé :(",
+            "",
+            "d'accord"
+          );
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+        },
+      });
+    },
+    () => {}
+  );
 }
 
 /**
