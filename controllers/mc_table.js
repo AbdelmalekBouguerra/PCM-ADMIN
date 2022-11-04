@@ -2,6 +2,7 @@
  * Author : Abdelmalek BOUGUERRA
  * Author Email : abdelmalekbouguerra2000@gmail.com
  * Created : Mar 2022
+ * Updated : Nov 2022
  * description : All interaction with employeur table getter and setters From database, handling
  *               POST and GET methods called by the view "employeur.hbs".
  *
@@ -9,9 +10,14 @@
  *
  */
 
-// call the db connection object
 const db = require("../env/db");
-
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/sequelize");
+const Medecins = require("../models/medecins_conventionnes.js")(
+  sequelize,
+  DataTypes
+);
+const pureJson = require("../utility/pureJson");
 var table = [];
 
 /** getEmpTable
@@ -34,10 +40,14 @@ function deleteRows(selectedData, callback) {
   );
   selectedData = JSON.parse(selectedData);
   selectedData.forEach((ele) => {
-    db.execute("DELETE FROM MEDECINS_CONVENTIONNES WHERE ID = ?;", [ele.ID], (err, results) => {
-      if (err) console.log(err);
-      else console.log(ele.ID, "deleted");
-    });
+    db.execute(
+      "DELETE FROM MEDECINS_CONVENTIONNES WHERE ID = ?;",
+      [ele.ID],
+      (err, results) => {
+        if (err) console.log(err);
+        else console.log(ele.ID, "deleted");
+      }
+    );
   });
   callback();
 }
@@ -100,110 +110,69 @@ function setMCTable(table, callback) {
   }
 }
 
-/** pureJson
-* fusion all the json object with same ids that not have a value of string (bcz if  string
-  it means new row) :
-* var empTable = [
-  { id: '8', col: "libelle", value: "1" },
-  { id: '8', col: "region", value: "2" },
-  { id: '8', col: "tele", value: "3" },
-  { id: '8', col: "email", value: "4" },
-  { id: '9', col: "email", value: "4" },
-  { id: '9', col: "libelle", value: "1" },
-  { id: '9', col: "region", value: "2" },
-  { id: '18', col: "tele", value: "3" },
-  { id: 7, col: "libelle", value: "5" }
-]; 
-* becomes =>
-res = [
-  { id: '9', libelle: '1', region: '2', tele: '3', email: '4' },
-  { id: '9', email: '4', libelle: '1', region: '2' },
-  { id: '18', tele: '3' },
-  { id: 7, col: "libelle", value: "5" }
-]
-* @param empTable json object that u want to purify.
-* @return Json object that purified .
-*/
-
-function pureJson(empTable) {
-  var res = [];
-  var row = {};
-  var ids = [];
-  var isExisted = false;
-
-  empTable.forEach((ele) => {
-    isExisted = false;
-    if (typeof ele.ID == "string") {
-      // for first id when inserted directly
-      if (typeof ids !== "undefined" && ids.length === 0) {
-        ids.push(ele.ID);
-      } else {
-        // check if ids already inserted
-        for (let i = 0; i < ids.length; i++)
-          if (ele.ID == ids[i]) {
-            isExisted = true;
-            break;
-          }
-      }
-      // if res is empty we creat first element and inserted
-      if (typeof res !== "undefined" && res.length === 0) {
-        row["ID"] = ele.ID;
-        row[ele.col] = ele.value;
-        res.push(row);
-        row = {};
-        // creat first element and push it to the res = [{id : ele.ID , ele.col = ele.value}]
-      } else if (isExisted) {
-        res.forEach((ele2) => {
-          if (ele2.ID == ele.ID) {
-            ele2[ele.col] = ele.value;
-          }
-        });
-      } else {
-        row["ID"] = ele.ID;
-        row[ele.col] = ele.value;
-        res.push(row);
-        ids.push(ele.ID);
-        row = {};
-      }
-    } else {
-      res.push(ele);
-    }
-  });
-  return res;
-}
-
 module.exports = {
   get: (req, res) => {
-    getMCTable((results) => {
-      console.log("am here");
-      table = results;
-      // res.render("sh", { table: table });
-      res.json({ last_page: 1, data: table });
-    });
+    Medecins.findAll()
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(500).json(err));
   },
   post: (req, res) => {
-    // var { id_empTable } = req.body;
-    console.log("🚀 ~ file: emp_table.js ~ line 174 ~ req.body", req.body);
+    if (req.body !== null) {
+      // first we organize our object.
+      const result = pureJson(req.body);
+      // then we loop in each element
 
-    // id_empTable = JSON.parse(req.body)
-    // console.log(id_empTable);
-
-    setMCTable(req.body, () => {
-      res.json({
-        msg: "success",
-      });
-    });
+      for (const element of result) {
+        // if id is string it means new line
+        if (typeof element.ID != "string") {
+          db.query(
+            "UPDATE `medecins_conventionnes` SET " +
+              element.col +
+              "= ? WHERE id = ?;",
+            [
+              // element.col,
+              element.value,
+              parseInt(element.ID),
+            ],
+            (err, results) => {
+              if (err) console.log(err);
+              else console.log(element.ID + " update successfully");
+            }
+          );
+          // if id is int it means it s a new line
+        } else {
+          // check if element of table object is not undefined
+          let ID = null,
+            CODE = null,
+            STR = null;
+          if (typeof element.ID !== "undefined") ID = element.ID;
+          if (typeof element.code_mnémonique !== "undefined")
+            CODE = element.code_mnémonique;
+          if (typeof element.structure_libelle !== "undefined")
+            STR = element.structure_libelle;
+          db.query(
+            "INSERT INTO medecins_conventionnes(id,medecin,specialite,adresse,tele,wilaya) VALUES(?,?,?,?,?,?);",
+            [ID, CODE, STR],
+            (err, results) => {
+              if (err) console.log(err);
+              else console.log(element.ID + " insert successfully");
+            }
+          );
+        }
+      }
+      res.status(200).send({ message: "OK" });
+      //todo change this
+    } else {
+      res.status(401).send({ message: "Insufficient data" });
+    }
   },
-  delete: (req, res) => {
-    var { selectedRowsForDel } = req.body;
-
-    console.log(
-      "🚀 ~ file: emp_table.js ~ line 181 ~ value",
-      selectedRowsForDel
-    );
-
-    deleteRows(selectedRowsForDel, () => {
-      res.redirect("/Medecins_conventionnes");
+  delete: async (req, res) => {
+    let selectedRowsForDel = req.body;
+    selectedRowsForDel = selectedRowsForDel.map((row) => row.id);
+    const row = await Medecins.destroy({
+      where: { id: selectedRowsForDel },
     });
+    if (row) res.status(200).send({ message: "OK" });
+    else res.status(404).send({ message: "ROW NOT FOUND" });
   },
 };

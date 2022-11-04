@@ -1,56 +1,97 @@
-function deletRow() {
-  // var input = document.getElementById("hiddenInput");
-  // input.value = JSON.stringify(id_empTable);
-  console.log("json", id_empTable);
-  // console.log("input : ", input.value);
-  if (confirm("êtes-vous sûr de vouloir ajouter ces lignes!")) {
-    $.ajax({
-      url: "/MC", // Url of backend (can be python, php, etc..)
-      type: "POST", // data type (can be get, post, put, delete)
-      data: JSON.stringify(id_empTable),
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
-      success: function (response, textStatus, jqXHR) {
-        console.log(response);
-        table.setData();
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log(errorThrown);
-      },
-    });
-  } else return false;
+Notiflix.Report.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  success: {
+    svgColor: "#32c682",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#32c682",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(50,198,130,0.2)",
+  },
+  failure: {
+    svgColor: "#ff5549",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#ff5549",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(255,85,73,0.2)",
+  },
+});
+
+Notiflix.Confirm.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  messageColor: "#ffffff",
+  cancelButtonColor: "#f8f8f8",
+  cancelButtonBackground: "#d30000",
+});
+
+function addRow() {
+  Notiflix.Confirm.show(
+    "Ajout de lignes",
+    "Êtes-vous sûr de vouloir ajouter des lignes ?",
+    "Oui",
+    "Non",
+    () => {
+      $.ajax({
+        url: "/MC", // Url of backend (can be python, php, etc..)
+        type: "POST", // data type (can be get, post, put, delete)
+        data: JSON.stringify(id_empTable),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+        success: function (response, textStatus, jqXHR) {
+          console.log(response);
+          Notiflix.Report.success(
+            "les lignes sélections bien ajouter",
+            "",
+            "d'accord"
+          );
+          table.setData();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          Notiflix.Report.failure(
+            "les lignes sélections n'est pas ajouter",
+            "",
+            "d'accord"
+          );
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+        },
+      });
+    }
+  ),
+    () => {};
 }
 function showBtn() {
-  var ele = document.getElementById("btn");
+  const ele = document.getElementById("btn");
 
   ele.innerHTML =
-    '<button type="button" onClick="deletRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
+    '<button type="button" onClick="addRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
     '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>';
 }
-function showDeleteBtn() {}
-var id_empTable = [];
-var selectedData = [];
-var json_emp = {};
+let id_empTable = [];
+let selectedData = [];
+let json_emp = {};
 // FIX : test if is it changed or not to save the new value.
 
 //initialize table
-var table = new Tabulator("#mc-table", {
+const table = new Tabulator("#mc-table", {
   scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
   height: "500px",
-  ajaxURL: "https://localhost:3030/MC", //ajax URL
+  ajaxURL: "http://localhost:3050/MC", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
   ajaxError: function (error) {
     //error - fetch response object
   },
   layout: "fitColumns",
-  progressiveLoad: "scroll",
+  // progressiveLoad: "scroll",
   autoColumns: false, //create columns from data field names
   history: true,
   placeholder: "No Data Set",
-  index: "ID",
+  index: "id",
   columns: [
     {
       formatter: "rowSelection",
@@ -62,45 +103,45 @@ var table = new Tabulator("#mc-table", {
         cell.getRow().toggleSelect();
       },
     },
-    { title: "Id", field: "ID", width: 53, sorter: "number" },
+    { title: "Id", field: "id", width: 53, sorter: "number" },
     {
       title: "Medcin",
-      field: "MEDECIN",
+      field: "medecin",
       width: 257,
       editor: "input",
       sorter: "string",
     },
     {
       title: "Specialite",
-      field: "SPECIALITE",
+      field: "specialite",
       width: 203,
       editor: "input",
       sorter: "string",
     },
     {
       title: "Adresse",
-      field: "ADRESSE",
+      field: "adresse",
       width: 524,
       editor: "input",
       sorter: "string",
     },
     {
       title: "Téléphone",
-      field: "TEL",
+      field: "tele",
       width: 239,
       editor: "input",
       sorter: "string",
     },
     {
       title: "Wilaya",
-      field: "WILLAYA",
+      field: "wilaya",
       editor: "input",
       sorter: "string",
     },
   ],
 });
 table.on("cellEdited", function (cell) {
-  json_emp["ID"] = cell.getRow().getData().ID;
+  json_emp["ID"] = cell.getRow().getData().id;
   json_emp["col"] = cell.getField();
   json_emp["value"] = cell.getValue();
 

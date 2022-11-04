@@ -2,6 +2,7 @@
  * Author : Abdelmalek BOUGUERRA
  * Author Email : abdelmalekbouguerra2000@gmail.com
  * Created : Mar 2022
+ * Updated : Nov 2022
  * description : All interaction with employeur table getter and setters From database, handling
  *               POST and GET methods called by the view "employeur.hbs".
  *
@@ -28,55 +29,6 @@ function deleteRows(selectedData, callback) {
   callback();
 }
 
-function setEmpTable(table, callback) {
-  if (table !== null) {
-    // first we organize our object.
-    var res = pureJson(table);
-    // then we loop in each element
-    for (var i = 0; i < res.length; i++) {
-      var modifItems = res[i];
-      // if id is string it means new line
-      if (!(typeof modifItems.ID == "string")) {
-        db.query(
-          "UPDATE structure SET " +
-            modifItems.col +
-            "= ? WHERE structure_id = ?;",
-          [
-            // modifItems.col,
-            modifItems.value,
-            parseInt(modifItems.ID),
-          ],
-          (err, results) => {
-            if (err) console.error(err);
-            else console.log("update successfully");
-          }
-        );
-        // if id is int it means it s a new line
-      } else {
-        console.log("execute insert");
-        // check if element of table object is not undefined
-        var ID = null,
-          CODE = null,
-          STR = null;
-        if (typeof modifItems.ID !== "undefined") ID = modifItems.ID;
-        if (typeof modifItems.CODE !== "undefined") CODE = modifItems.CODE;
-        if (typeof modifItems.STRUCTURE !== "undefined")
-          STR = modifItems.STRUCTURE;
-        db.query(
-          "INSERT INTO structure(structure_id,code_mnémonique,structure_libelle) VALUES(?,?,?);",
-          [ID, CODE, STR],
-          (err, results) => {
-            if (err) console.log(err);
-            else console.log("insert successfully");
-          }
-        );
-      }
-    }
-  } else {
-    return;
-  }
-}
-
 /** pureJson
 * fusion all the json object with same ids that not have a value of string (bcz if  string
   it means new row) :
@@ -101,7 +53,6 @@ res = [
 * @param empTable json object that u want to purify.
 * @return Json object that purified .
 */
-
 function pureJson(empTable) {
   var res = [];
   var row = {};
@@ -159,47 +110,44 @@ module.exports = {
     // // var { id_empTable } = req.body;
     // // id_empTable = JSON.parse(req.body);
     if (req.body !== null) {
-      console.log("🚀 ~ file: sh_table.js ~ line 162 ~ req.body", req.body);
-      console.log("I am HERE...");
       // first we organize our object.
-      var result = pureJson(req.body);
+      const result = pureJson(req.body);
       // then we loop in each element
 
-      for (var i = 0; i < result.length; i++) {
-        var modifItems = result[i];
+      for (const element of result) {
         // if id is string it means new line
-        if (!(typeof modifItems.ID == "string")) {
+        if (typeof element.ID != "string") {
           db.query(
             "UPDATE structure SET " +
-              modifItems.col +
+              element.col +
               "= ? WHERE structure_id = ?;",
             [
-              // modifItems.col,
-              modifItems.value,
-              parseInt(modifItems.ID),
+              // element.col,
+              element.value,
+              parseInt(element.ID),
             ],
             (err, results) => {
               if (err) console.log(err);
-              else console.log(modifItems.ID + " update successfully");
+              else console.log(element.ID + " update successfully");
             }
           );
           // if id is int it means it s a new line
         } else {
           // check if element of table object is not undefined
-          var ID = null,
+          let ID = null,
             CODE = null,
             STR = null;
-          if (typeof modifItems.ID !== "undefined") ID = modifItems.ID;
-          if (typeof modifItems.code_mnémonique !== "undefined")
-            CODE = modifItems.code_mnémonique;
-          if (typeof modifItems.structure_libelle !== "undefined")
-            STR = modifItems.structure_libelle;
+          if (typeof element.ID !== "undefined") ID = element.ID;
+          if (typeof element.code_mnémonique !== "undefined")
+            CODE = element.code_mnémonique;
+          if (typeof element.structure_libelle !== "undefined")
+            STR = element.structure_libelle;
           db.query(
             "INSERT INTO structure(structure_id,code_mnémonique,structure_libelle) VALUES(?,?,?);",
             [ID, CODE, STR],
             (err, results) => {
               if (err) console.log(err);
-              else console.log(modifItems.ID + " insert successfully");
+              else console.log(element.ID + " insert successfully");
             }
           );
         }
@@ -211,39 +159,29 @@ module.exports = {
     }
   },
   delete: async (req, res) => {
-    console.log(
-      "🚀 ~ file: sh_table.js ~ line 215 ~ delete: ~ req.body",
-      req.body
-    );
     let selectedRowsForDel = req.body;
     selectedRowsForDel = selectedRowsForDel.map((row) => row.structure_id);
-    console.log(
-      "🚀 ~ file: sh_table.js ~ line 215 ~ delete: ~ selectedRowsForDel",
-      selectedRowsForDel
-    );
     const row = await Structure.destroy({
       where: { structure_id: selectedRowsForDel },
     });
-    console.log("🚀 ~ file: sh_table.js ~ line 222 ~ delete: ~ row", row);
-
-    if (row) {
-      res.status(200).send({ message: "OK" });
-    } else {
-      res.status(404).send({ message: "ROW NOT FOUND" });
-    }
+    if (row) res.status(200).send({ message: "OK" });
+    else res.status(404).send({ message: "ROW NOT FOUND" });
   },
 };
 //! ==========================  WORK ON THIS -TOP PRIORITY- DO NOT REMOVE THIS ==========================
 
 ////to do 1[x] change ID in pureJson function to structure_id and leave the same build there
-//todo 2[] test if (1) its working or not.
+//todo 2[x] test if (1) its working or not.
 //todo 3[] update delete code should be fairly simple.
-//todo 4[-] write a tree plan for updating all tables in the same way
+//todo 4[] write a tree plan for updating all tables in the same way
 //* 1/ in public file change https to http
-//* 2/ add both in top
+//* 2/ change 3030 to 3050
+//* 3/ add both in top
+//* 4/ // progressiveLoad: "scroll",
+//* 5/ change filds name to new names
 //? const { DataTypes } = require("sequelize");
-// ? const sequelize = require("../config/sequelize");
-//* 3/ wrok on get and delete endpoints
+//? const sequelize = require("../config/sequelize");
+//* 3/ work on get and delete endpoints
 //* 4/ write any hard rework as todo for later update
 
 //! ==========================  WORK ON THIS -TOP PRIORITY- DO NOT REMOVE THIS ==========================

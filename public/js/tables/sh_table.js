@@ -1,5 +1,3 @@
-//! bug when updating existing row
-//todo add when updating table a massage appers
 Notiflix.Report.init({
   messageMaxLength: 1923,
   backgroundColor: "#121212",
@@ -29,10 +27,6 @@ Notiflix.Confirm.init({
   cancelButtonBackground: "#d30000",
 });
 function addRows() {
-  // var input = document.getElementById("hiddenInput");
-  // input.value = JSON.stringify(id_empTable);
-  console.log("json", id_empTable);
-  // console.log("input : ", input.value);
   Notiflix.Confirm.show(
     "Ajout de lignes",
     "Êtes-vous sûr de vouloir ajouter des lignes ?",
@@ -78,19 +72,13 @@ function showBtn() {
     '<button type="button" onClick="addRows();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
     '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>';
 }
-// function showDeleteBtn() {}
-var rowDelete = () => {
+const rowDelete = () => {
   Notiflix.Confirm.show(
     "Suppression des lignes",
     "Etes-vous sûr de vouloir supprime ces lignes!",
     "Oui",
     "Non",
     () => {
-      console.log(
-        "🚀 ~ file: sh_table.js ~ line 43 ~ rowDelete ~ selectedRowsForDel",
-        selectedRowsForDel
-      );
-
       $.ajax({
         url: "/deleteSH",
         type: "POST",
