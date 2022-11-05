@@ -97,8 +97,6 @@ router.post("/deleteSMT", smt_table.delete);
 // Liste des structures Tiers payant ========================
 router.get("/Structures_Tiers_payant", (req, res) => {
   user = req.session.adminUser;
-  // Fl = user.PRENOM.charAt(0).toUpperCase();
-  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("stp");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
@@ -110,8 +108,6 @@ router.post("/deleteSTP", stp_table.delete);
 // Liste des acts ==========================================
 router.get("/Acts", (req, res) => {
   user = req.session.adminUser;
-  // Fl = user.PRENOM.charAt(0).toUpperCase();
-  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("act");
 });
 /* obtenir la table (get) et ajouter les nouvelles lignes (post) */
@@ -123,8 +119,6 @@ router.post("/deleteACT", act_table.delete);
 // Liste des Demande prise en charge =======================
 router.get("/DPC", (req, res) => {
   user = req.session.adminUser;
-  // Fl = user.PRENOM.charAt(0).toUpperCase();
-  // Ln = user.NOM.charAt(0).toUpperCase() + user.NOM.slice(1);
   res.render("DPC");
 });
 /* obtenir toutes les demandes */

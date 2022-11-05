@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(
   session({
     secret: config.SESSION_SECRET,
-    maxAge: 2 * 60 * 60 * 1000, // 2 hours
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
 

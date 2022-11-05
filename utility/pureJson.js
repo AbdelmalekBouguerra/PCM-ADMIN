@@ -43,8 +43,8 @@ module.exports = function pureJson(empTable) {
         ids.push(ele.ID);
       } else {
         // check if ids already inserted
-        for (let i = 0; i < ids.length; i++)
-          if (ele.ID == ids[i]) {
+        for (const element of ids)
+          if (ele.ID == element) {
             isExisted = true;
             break;
           }

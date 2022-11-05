@@ -1,8 +1,33 @@
-function deletRow() {
-  // var input = document.getElementById("hiddenInput");
-  // input.value = JSON.stringify(id_empTable);
+Notiflix.Report.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  success: {
+    svgColor: "#32c682",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#32c682",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(50,198,130,0.2)",
+  },
+  failure: {
+    svgColor: "#ff5549",
+    titleColor: "#ffffff",
+    messageColor: "#ffffff",
+    buttonBackground: "#ff5549",
+    buttonColor: "#fff",
+    backOverlayColor: "rgba(255,85,73,0.2)",
+  },
+});
+
+Notiflix.Confirm.init({
+  messageMaxLength: 1923,
+  backgroundColor: "#121212",
+  messageColor: "#ffffff",
+  cancelButtonColor: "#f8f8f8",
+  cancelButtonBackground: "#d30000",
+});
+function addRow() {
   console.log("json", id_empTable);
-  // console.log("input : ", input.value);
   if (confirm("êtes-vous sûr de vouloir ajouter ces lignes!")) {
     $.ajax({
       url: "/PC", // Url of backend (can be python, php, etc..)
@@ -27,7 +52,7 @@ function showBtn() {
   var ele = document.getElementById("btn");
 
   ele.innerHTML =
-    '<button type="button" onClick="deletRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
+    '<button type="button" onClick="addRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
     '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>';
 }
 function showDeleteBtn() {}
@@ -37,20 +62,20 @@ var json_emp = {};
 // FIX : test if is it changed or not to save the new value.
 
 //initialize table
-var table = new Tabulator("#pc-table", {
+const table = new Tabulator("#pc-table", {
   scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
   height: "500px",
-  ajaxURL: "https://localhost:3030/PC", //ajax URL
+  ajaxURL: "http://localhost:3050/PC", //ajax URL
   ajaxConfig: "GET", //ajax HTTP request type
   ajaxError: function (error) {
     //error - fetch response object
   },
   layout: "fitColumns",
-  progressiveLoad: "scroll",
-  autoColumns: false, //create columns from data field names
+  // progressiveLoad: "scroll",
+  autoColumns: false,
   history: true,
   placeholder: "No Data Set",
-  index: "ID",
+  index: "id",
   columns: [
     {
       formatter: "rowSelection",
@@ -62,24 +87,24 @@ var table = new Tabulator("#pc-table", {
         cell.getRow().toggleSelect();
       },
     },
-    { title: "Id", field: "ID", width: 53, sorter: "number" },
+    { title: "id", field: "ID", width: 53, sorter: "number" },
     {
       title: "Specialite",
-      field: "SPECIALITE",
+      field: "specialite",
       width: 203,
       editor: "input",
       sorter: "string",
     },
     {
       title: "Cms_boumerdes",
-      field: "CMS_BOUMERDES",
+      field: "cms_boumerdes",
       editor: "input",
       formatter: "tickCross",
       hozAlign: "center",
     },
     {
       title: "Cms_tizi_ouzou",
-      field: "CMS_TIZI_OUZOU",
+      field: "cms_tiziouzou",
       editor: "input",
       formatter: "tickCross",
       hozAlign: "center",
@@ -87,7 +112,7 @@ var table = new Tabulator("#pc-table", {
   ],
 });
 table.on("cellEdited", function (cell) {
-  json_emp["ID"] = cell.getRow().getData().ID;
+  json_emp["ID"] = cell.getRow().getData().id;
   json_emp["col"] = cell.getField();
   json_emp["value"] = cell.getValue();
 

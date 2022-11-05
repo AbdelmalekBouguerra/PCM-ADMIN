@@ -1,3 +1,57 @@
+//initialize table
+const table = new Tabulator("#act-table", {
+  scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
+  height: "500px",
+  ajaxURL: "http://localhost:3050/ACT", //ajax URL
+  ajaxConfig: "GET", //ajax HTTP request type
+  ajaxError: function (error) {
+    //error - fetch response object
+  },
+  layout: "fitColumns",
+  //   progressiveLoad: "load",
+  autoColumns: false, //create columns from data field names
+  history: true,
+  //  placeholder: "No Data Set",
+  index: "id",
+  columns: [
+    {
+      formatter: "rowSelection",
+      width: 10,
+      titleFormatter: "rowSelection",
+      hozAlign: "center",
+      headerSort: false,
+      cellClick: function (e, cell) {
+        cell.getRow().toggleSelect();
+      },
+    },
+    { title: "Id", field: "id", width: 53, sorter: "number" },
+    {
+      title: "Code",
+      field: "code",
+      width: 203,
+      editor: "input",
+      sorter: "string",
+    },
+    {
+      title: "Désignation",
+      field: "designation",
+      editor: "input",
+      sorter: "string",
+    },
+    {
+      title: "Montant global ttc",
+      field: "montant_global",
+      editor: "input",
+      sorter: "number",
+    },
+    {
+      title: "Structures",
+      field: "tiers_payant_structure.structure",
+      sorter: "string",
+    },
+  ],
+});
+
 function deletRow() {
   // var input = document.getElementById("hiddenInput");
   // input.value = JSON.stringify(id_empTable);
@@ -23,6 +77,7 @@ function deletRow() {
     });
   } else return false;
 }
+
 function showBtn() {
   var ele = document.getElementById("btn");
 
@@ -30,66 +85,13 @@ function showBtn() {
     '<button type="button" onClick="deletRow();" class="btn btn-inverse-primary btn-fw m-2">Enregistrer</button> ' +
     '<button type="button" onClick="window.location.reload();" class="btn btn-inverse-danger btn-fw m-2">Cancel</button>';
 }
+
 function showDeleteBtn() {}
+
 var id_empTable = [];
 var selectedData = [];
 var json_emp = {};
 // FIX : test if is it changed or not to save the new value.
-
-//initialize table
-var table = new Tabulator("#act-table", {
-  scrollToRowPosition: "bottom", //position row in the center of the table when scrolled to
-  height: "500px",
-  ajaxURL: "https://localhost:3030/ACT", //ajax URL
-  ajaxConfig: "GET", //ajax HTTP request type
-  ajaxError: function (error) {
-    //error - fetch response object
-  },
-  layout: "fitColumns",
-  progressiveLoad: "load",
-  autoColumns: false, //create columns from data field names
-  history: true,
-  placeholder: "No Data Set",
-  index: "ID",
-  columns: [
-    {
-      formatter: "rowSelection",
-      width: 10,
-      titleFormatter: "rowSelection",
-      hozAlign: "center",
-      headerSort: false,
-      cellClick: function (e, cell) {
-        cell.getRow().toggleSelect();
-      },
-    },
-    { title: "Id", field: "ID", width: 53, sorter: "number" },
-    {
-      title: "Code",
-      field: "CODE",
-      width: 203,
-      editor: "input",
-      sorter: "string",
-    },
-    {
-      title: "Désignation",
-      field: "DÉSIGNATION",
-      editor: "input",
-      sorter: "string",
-
-    },
-    {
-      title: "Montant global ttc",
-      field: "MONTANT_GLOBAL_TTC",
-      editor: "input",
-      sorter: "number",
-    },
-    {
-      title: "Structures",
-      field: "STRUCTURES",
-      sorter: "string",
-    },
-  ],
-});
 table.on("cellEdited", function (cell) {
   json_emp["ID"] = cell.getRow().getData().ID;
   json_emp["col"] = cell.getField();
@@ -133,9 +135,9 @@ document.getElementById("del-row").addEventListener("click", function () {
 });
 
 //Define variables for input elements
-var fieldEl = document.getElementById("filter-field");
-var typeEl = "like";
-var valueEl = document.getElementById("filter-value");
+const fieldEl = document.getElementById("filter-field");
+const typeEl = "like";
+const valueEl = document.getElementById("filter-value");
 
 //Trigger setFilter function with correct parameters
 function updateFilter() {

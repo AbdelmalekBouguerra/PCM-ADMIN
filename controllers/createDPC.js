@@ -19,6 +19,7 @@ const tiers_payant_structure = require("../models/tiers_payant_structure.js")(
   db,
   DataTypes
 );
+const Structure = require("../models/structure")(db, DataTypes);
 const cms_act = require("../models/cms_act")(db, DataTypes);
 const act = require("../models/act")(db, DataTypes);
 const User = require("../models/user")(db, DataTypes);
@@ -42,6 +43,7 @@ module.exports = async function (req, res, next) {
     // first of all we check if this dpc is confirmed by all admins
     const dpcResult = await dpc.findOne({
       where: { dpc_id: dpcId },
+      raw: true,
       include: [
         {
           model: User,
@@ -52,6 +54,12 @@ module.exports = async function (req, res, next) {
         },
       ],
     });
+    //todo add later to one sql connection
+    let employeur = await Structure.findOne({
+      where: { structure_id: dpcResult["user.employeur"] },
+      attributes: ["structure_libelle"],
+    });
+    employeur = employeur.structure_libelle;
     console.log("dpc :" + JSON.stringify(dpcResult));
     if (dpcResult === null) {
       res.status(404).send({ message: "Not Found" });
@@ -91,6 +99,7 @@ module.exports = async function (req, res, next) {
       }
       const montant_sh = (parseFloat(thisAct.montant_global) * 80) / 100;
       const montant_adh = parseFloat(thisAct.montant_global) - montant_sh;
+      console.log("dpc :", dpcResult);
       data = {
         seq: `${dpcResult.dpc_number}/2022`, //todo this should be unique by document not by dpc
         dateCreation: new Date().toLocaleDateString(), // todo chage this with col that containe the date of dpc file creatin
@@ -98,20 +107,20 @@ module.exports = async function (req, res, next) {
         structureMedicale: thisStr.libelle,
         structureAddresse: thisStr.adresse,
         designation: thisAct.designation,
-        adhStatu: dpcResult.user.role, //todo replace this with status in user table
-        adhNom: dpcResult.user.nom,
-        adhPrenom: dpcResult.user.prenom,
+        adhStatu: dpcResult["user.status"], //todo replace this with status in user table
+        adhNom: dpcResult["user.nom"],
+        adhPrenom: dpcResult["user.prenom"],
         adhFonction: "FONCTION", //todo add fonction to user table
-        adhAffection: "AFFECTION", //todo ask what is affection ??
-        adhMatricule: dpcResult.user.matricule,
+        adhAffection: employeur, //todo ask what is affection ??
+        adhMatricule: dpcResult["user.matricule"],
         beneficiaire: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.lien_parante
+          ? dpcResult["beneficiaire.lien_parante"]
           : "lui meme",
         beneficiaireNom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.nom
+          ? dpcResult["beneficiaire.nom"]
           : "",
         beneficiairePrenom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.prenom
+          ? dpcResult["beneficiaire.prenom"]
           : "",
         montant_sh,
         montant_adh,
@@ -128,20 +137,20 @@ module.exports = async function (req, res, next) {
         strucutreSpecialite: thisAct.specialite,
         structureAddresse: thisAct.adresse,
         designation: "DESIGNATION", //todo ask about where to get this data form
-        adhStatu: dpcResult.user.role, //todo replace this with status in user table
-        adhNom: dpcResult.user.nom,
-        adhPrenom: dpcResult.user.prenom,
+        adhStatu: dpcResult["user.status"], //todo replace this with status in user table
+        adhNom: dpcResult["user.nom"],
+        adhPrenom: dpcResult["user.prenom"],
         adhFonction: "FONCTION", //todo add fonction to user table
-        adhAffection: "AFFECTION", //todo ask what is affection ??
-        adhMatricule: dpcResult.user.matricule,
+        adhAffection: employeur, //todo ask what is affection ??
+        adhMatricule: dpcResult["user.matricule"],
         beneficiaire: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.lien_parante
+          ? dpcResult["beneficiaire.lien_parante"]
           : "lui meme",
         beneficiaireNom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.nom
+          ? dpcResult["beneficiaire.nom"]
           : "",
         beneficiairePrenom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.prenom
+          ? dpcResult["beneficiaire.prenom"]
           : "",
       };
     } else if (dpcResult.type_demande === "Prises en charge 100 %") {
@@ -156,20 +165,20 @@ module.exports = async function (req, res, next) {
         strucutreSpecialite: thisAct.acte,
         structureAddresse: thisAct.adresse,
         designation: "DESIGNATION", //todo ask about where to get this data form
-        adhStatu: dpcResult.user.role, //todo replace this with status in user table
-        adhNom: dpcResult.user.nom,
-        adhPrenom: dpcResult.user.prenom,
+        adhStatu: dpcResult["user.status"], //todo replace this with status in user table
+        adhNom: dpcResult["user.nom"],
+        adhPrenom: dpcResult["user.prenom"],
         adhFonction: "FONCTION", //todo add fonction to user table
-        adhAffection: "AFFECTION", //todo ask what is affection ??
-        adhMatricule: dpcResult.user.matricule,
+        adhAffection: employeur, //todo ask what is affection ??
+        adhMatricule: dpcResult["user.matricule"],
         beneficiaire: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.lien_parante
+          ? dpcResult["beneficiaire.lien_parante"]
           : "lui meme",
         beneficiaireNom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.nom
+          ? dpcResult["beneficiaire.nom"]
           : "",
         beneficiairePrenom: dpcResult.beneficiaire
-          ? dpcResult.beneficiaire.prenom
+          ? dpcResult["beneficiaire.prenom"]
           : "",
       };
     } else if (dpcResult.type_demande === "Randevou CMS") {
