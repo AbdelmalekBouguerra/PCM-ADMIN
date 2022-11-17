@@ -75,7 +75,6 @@ function showBtn() {
 let id_empTable = [];
 let selectedData = [];
 let json_emp = {};
-// FIX : test if is it changed or not to save the new value.
 
 //initialize table
 const table = new Tabulator("#mc-table", {
@@ -161,8 +160,9 @@ table.on("rowSelected", function (row) {
 
 document.getElementById("add-row").addEventListener("click", function () {
   var rowCount = table.getDataCount();
+  console.log("🚀 ~ file: mc_table.js ~ line 163 ~ rowCount", rowCount);
   // we add +'' to make the ID a string cuz our controller test if string it update else insert
-  table.addRow({ ID: rowCount + 1 + "" });
+  table.addRow({ id: rowCount + 1 + "" });
   table.scrollToRow(rowCount + 1, "middle", true);
   table.redraw();
 });

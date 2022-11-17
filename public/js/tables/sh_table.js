@@ -26,6 +26,7 @@ Notiflix.Confirm.init({
   cancelButtonColor: "#f8f8f8",
   cancelButtonBackground: "#d30000",
 });
+
 function addRows() {
   Notiflix.Confirm.show(
     "Ajout de lignes",
